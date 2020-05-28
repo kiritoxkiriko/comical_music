@@ -12,7 +12,7 @@ class SongList {
   List<Tag> _tags;
   String _introduction;
   User _creator;
-  String _date;
+  int _time;
   List<Song> _songs;
   Image _image;
   bool _open;
@@ -23,7 +23,7 @@ class SongList {
         List<Tag> tags,
         String introduction,
         User creator,
-        String date,
+        int time,
         List<Song> songs,
         Image image,
         bool open}) {
@@ -32,7 +32,7 @@ class SongList {
     this._tags = tags;
     this._introduction = introduction;
     this._creator = creator;
-    this._date = date;
+    this._time = time;
     this._songs = songs;
     this._image = image;
     this._open = open;
@@ -48,8 +48,8 @@ class SongList {
   set introduction(String introduction) => _introduction = introduction;
   User get creator => _creator;
   set creator(User creator) => _creator = creator;
-  String get date => _date;
-  set date(String date) => _date = date;
+  int get time => _time;
+  set time(int time) => _time = time;
   List<Song> get songs => _songs;
   set songs(List<Song> songs) => _songs = songs;
   Image get image => _image;
@@ -63,7 +63,7 @@ class SongList {
     _tags = json['tags'];
     _introduction = json['introduction'];
     _creator = json['creator'];
-    _date = json['date'];
+    _time = json['time'];
     _songs = json['songs'];
     _image = json['image'];
     _open = json['open'];
@@ -76,7 +76,7 @@ class SongList {
     data['tags'] = this._tags;
     data['introduction'] = this._introduction;
     data['creator'] = this._creator;
-    data['date'] = this._date;
+    data['time'] = this._time;
     data['songs'] = this._songs;
     data['image'] = this._image;
     data['open'] = this._open;

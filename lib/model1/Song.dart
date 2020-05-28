@@ -10,7 +10,7 @@ class Song {
   List<Singer> _singers;
   Album _album;
   User _uploader;
-  String _uploadDate;
+  int _uploadTime;
   String _path;
   String _lrcPath;
 
@@ -21,7 +21,7 @@ class Song {
         List<Singer> singers,
         Album album,
         User uploader,
-        String uploadDate,
+        int uploadTime,
         String path,
         String lrcPath}) {
     this._id = id;
@@ -30,7 +30,7 @@ class Song {
     this._singers = singers;
     this._album = album;
     this._uploader = uploader;
-    this._uploadDate = uploadDate;
+    this._uploadTime = uploadTime;
     this._path = path;
     this._lrcPath = lrcPath;
   }
@@ -47,8 +47,8 @@ class Song {
   set album(Album album) => _album = album;
   User get uploader => _uploader;
   set uploader(User uploader) => _uploader = uploader;
-  String get uploadDate => _uploadDate;
-  set uploadDate(String uploadDate) => _uploadDate = uploadDate;
+  int get uploadTime => _uploadTime;
+  set uploadTime(int uploadTime) => _uploadTime = uploadTime;
   String get path => _path;
   set path(String path) => _path = path;
   String get lrcPath => _lrcPath;
@@ -61,7 +61,7 @@ class Song {
     _singers = json['singers'];
     _album = json['album'];
     _uploader = json['uploader'];
-    _uploadDate = json['uploadDate'];
+    _uploadTime = json['uploadTime'];
     _path = json['path'];
     _lrcPath = json['lrcPath'];
   }
@@ -74,7 +74,7 @@ class Song {
     data['singers'] = this._singers;
     data['album'] = this._album;
     data['uploader'] = this._uploader;
-    data['uploadDate'] = this._uploadDate;
+    data['uploadTime'] = this._uploadTime;
     data['path'] = this._path;
     data['lrcPath'] = this._lrcPath;
     return data;

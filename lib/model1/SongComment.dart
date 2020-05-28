@@ -7,7 +7,7 @@ class SongComment {
   String _content;
   User _replier;
   SongComment _replyTo;
-  String _date;
+  int _time;
   int _likeCount;
   bool _exist;
 
@@ -16,14 +16,14 @@ class SongComment {
         String content,
         User replier,
         SongComment replyTo,
-        String date,
+        int time,
         int likeCount,
         bool exist}) {
     this._id = id;
     this._content = content;
     this._replier = replier;
     this._replyTo = replyTo;
-    this._date = date;
+    this._time = time;
     this._likeCount = likeCount;
     this._exist = exist;
   }
@@ -36,8 +36,8 @@ class SongComment {
   set replier(User replier) => _replier = replier;
   SongComment get replyTo => _replyTo;
   set replyTo(SongComment replyTo) => _replyTo = replyTo;
-  String get date => _date;
-  set date(String date) => _date = date;
+  int get time => _time;
+  set time(int time) => _time = time;
   int get likeCount => _likeCount;
   set likeCount(int likeCount) => _likeCount = likeCount;
   bool get exist => _exist;
@@ -48,7 +48,7 @@ class SongComment {
     _content = json['content'];
     _replier = json['replier'];
     _replyTo = json['replyTo'];
-    _date = json['date'];
+    _time = json['time'];
     _likeCount = json['likeCount'];
     _exist = json['exist'];
   }
@@ -59,7 +59,7 @@ class SongComment {
     data['content'] = this._content;
     data['replier'] = this._replier;
     data['replyTo'] = this._replyTo;
-    data['date'] = this._date;
+    data['time'] = this._time;
     data['likeCount'] = this._likeCount;
     data['exist'] = this._exist;
     return data;
