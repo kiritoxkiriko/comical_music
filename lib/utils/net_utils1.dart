@@ -1,14 +1,13 @@
 import 'dart:io';
 
+import 'package:comical_music/model1/PageResponseData.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/model/album.dart';
 import 'package:comical_music/model/banner.dart' as mBanner;
 import 'package:comical_music/model/daily_songs.dart';
-import 'package:comical_music/model/event.dart' as prefix0;
 import 'package:comical_music/model/hot_search.dart';
 import 'package:comical_music/model/lyric.dart';
 import 'package:comical_music/model/mv.dart';
@@ -33,7 +32,8 @@ import 'custom_log_interceptor.dart';
 
 class NetUtils1 {
   static Dio _dio;
-  static final String baseUrl = 'http://127.0.0.1:8088';
+  static final String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTEyNTg0NjcsInVzZXJuYW1lIjoiYWRtaW4ifQ.ltPr1PmGFCu3rnb8iN_IM5xjz9mJCkG0s_2_kslOM18";
+  static final String baseUrl = 'http://192.168.199.147:8088';
   static Future<List<InternetAddress>> _fm10s =
   InternetAddress.lookup("ws.acgvideo.com");
 
@@ -46,7 +46,7 @@ class NetUtils1 {
       ..interceptors
           .add(LogInterceptor(responseBody: true, requestBody: true));
 
-//    // 海外華人可使用 nondanee/UnblockNeteaseMusic
+    // 海外華人可使用 nondanee/UnblockNeteaseMusic
 //    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
 //        (client) {
 //      client.findProxy = (uri) {
@@ -82,20 +82,28 @@ class NetUtils1 {
         Map<String, dynamic> params,
         bool isShowLoading = true,
       }) async {
+    Options options=Options(headers: {HttpHeaders.authorizationHeader:token});
     if (isShowLoading) Loading.showLoading(context);
     try {
-      return await _dio.get(url, queryParameters: params);
+      print(params);
+      assert(_dio!=null);
+      return await _dio.get(url,queryParameters: params, options: options);
     } on DioError catch (e) {
+      print('1');
       if (e == null) {
+        print('2');
         return Future.error(Response(data: -1));
       } else if (e.response != null) {
-        if (e.response.statusCode >= 300 && e.response.statusCode < 400) {
+        if (e.response.statusCode !=200) {
           _reLogin();
+          print('3');
           return Future.error(Response(data: -1));
         } else {
+          print('4');
           return Future.value(e.response);
         }
       } else {
+        print('5');
         return Future.error(Response(data: -1));
       }
     } finally {
@@ -256,7 +264,7 @@ class NetUtils1 {
   }
 
   /// 获取评论列表
-  static Future<SongCommentData> sendComment(
+  static Future<SongCommentData> sendComment (
       BuildContext context, {
         @required Map<String, dynamic> params,
       }) async {
@@ -323,13 +331,22 @@ class NetUtils1 {
   }
 
   /// 获取动态数据
-  static Future<prefix0.EventData> getEventData({
-    @required Map<String, dynamic> params,
+  static Future<PageResponseData> getPost({
+    @required int page,
+    int boardId
   }) async {
-    var response = await _get(null, '/event',
-        params: params, isShowLoading: false);
-    return prefix0.EventData.fromJson(response.data);
+    var response;
+    if(boardId==null){
+      response = await _get(null, '/api/post/all',
+          params: {'page': page} ,isShowLoading: false);
+    }else{
+      response = await _get(null, '/api/post/board/${boardId}',
+          params: {'page': page}, isShowLoading: false);
+    }
+
+    return PageResponseData.fromJson(response.data);
   }
+
 
   /// Music
   static Future<String> getMusicURL(BuildContext context, id) async {

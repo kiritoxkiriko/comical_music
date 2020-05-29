@@ -1,12 +1,12 @@
 import 'SongList.dart';
 
-class Post {
+class UserSpace {
   int _id;
   String _information;
   SongList _favoriteSongs;
   List<SongList> _favoriteSongLists;
 
-  Post(
+  UserSpace(
       {int id,
         String information,
         SongList favoriteSongs,
@@ -27,7 +27,7 @@ class Post {
   set favoriteSongLists(List<SongList> favoriteSongLists) =>
       _favoriteSongLists = favoriteSongLists;
 
-  Post.fromJson(Map<String, dynamic> json) {
+  UserSpace.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _information = json['information'];
     _favoriteSongs = json['favoriteSongs'];

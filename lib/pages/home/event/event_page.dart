@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:comical_music/model1/Post.dart';
+import 'package:comical_music/model1/UserSpace.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:extended_text/extended_text.dart';
@@ -9,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:comical_music/model/event.dart';
 import 'package:comical_music/model/event_content.dart';
-import 'package:comical_music/model/song.dart' as prefix0;
+//import 'package:comical_music/model/song.dart' as prefix0;
 import 'package:comical_music/utils/event_special_text_span_builder.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/utils/net_utils.dart';
@@ -34,11 +36,11 @@ class _EventPageState extends State<EventPage>
     with AutomaticKeepAliveClientMixin {
   EasyRefreshController _controller;
   FocusNode _blankNode = FocusNode();
-  List<Event> _eventData = []; // 动态数据
-  List<Event> _curRequestData = []; // 当前请求回来的动态数据，如果为空的话则代表没有数据了
+  List<Post> _eventData = []; // 动态数据
+  List<Post> _curRequestData = []; // 当前请求回来的动态数据，如果为空的话则代表没有数据了
 
   int lasttime = -1;
-  EventRepository eventRepository = EventRepository();
+  PostRepository postRepository = PostRepository();
 
   @override
   void initState() {
@@ -48,54 +50,56 @@ class _EventPageState extends State<EventPage>
 
   // 构建动态通用的模板（头像、粉丝等）
   Widget _buildCommonTemplate(
-      Event data, EventContent contentData, Widget content) {
+      Post data, Widget content) {
     TextSpan textSpan = TextSpan(
       children: [
-        TextSpan(text: data.user.nickname, style: common14BlueTextStyle),
+        TextSpan(text: data.poster.username, style: common14BlueTextStyle),
       ],
     );
-    // type 35：纯文字， 39：video，18：song
+
+    // type 1：纯文字， 2：音乐，3：歌单
     switch (data.type) {
-      case 35:
+      case 1:
         break;
-      case 39:
+      case 2:
         textSpan.children.add(
-          TextSpan(text: ' 分享视频：', style: common14TextStyle),
+          TextSpan(text: ' 分享音乐：', style: common14TextStyle),
         );
         break;
-      case 18:
+      case 3:
         textSpan.children.add(
-          TextSpan(text: ' 分享单曲：', style: common14TextStyle),
+          TextSpan(text: ' 分享歌单：', style: common14TextStyle),
         );
         break;
     }
+
     Widget title = RichText(text: textSpan);
 
     Widget picsWidget; // 图片widget
     int crossCount;
     List<BuildContext> picsContexts = [];
 
-    if (data.pics.isEmpty) {
+    if (data.sharedImages.isEmpty) {
       picsWidget = Container();
-    } else if (data.pics.length == 1) {
+    } else if (data.sharedImages.length == 1) {
       picsWidget = Builder(builder: (context) {
         picsContexts.add(context);
         return GestureDetector(
           onTap: () {
             NavigatorUtil.goLookImgPage(
-                context, data.pics.map((p) => p.originUrl).toList(), 0);
+                context, data.sharedImages.map((p) => p.path).toList(), 0);
 
 //            Navigator.push(context, LookImgRoute(data.pics.map((p) => p.originUrl).toList(), 0, picsContexts));
           },
           child: Padding(
             padding: EdgeInsets.only(top: ScreenUtil().setWidth(15)),
-            child: Utils.showNetImage(data.pics[0].originUrl),
+            child: Utils.showNetImage(data.sharedImages[0].path),
           ),
         );
       });
     } else {
-      if (data.pics.length >= 2 && data.pics.length < 5) crossCount = 2;
-      if (data.pics.length > 4) crossCount = 3;
+      if (data.sharedImages.length >= 2 && data.sharedImages.length < 5) crossCount = 2;
+      if (data.sharedImages.length > 4) crossCount = 3;
 
       picsWidget = Padding(
         padding: EdgeInsets.only(top: ScreenUtil().setWidth(15)),
@@ -114,13 +118,13 @@ class _EventPageState extends State<EventPage>
                 return GestureDetector(
                   onTap: () {
                     NavigatorUtil.goLookImgPage(context,
-                        data.pics.map((p) => p.originUrl).toList(), index);
+                        data.sharedImages.map((p) => p.path).toList(), index);
 //                  Navigator.push(context, LookImgRoute(data.pics.map((p) => p.originUrl).toList(), index, picsContexts));
                   },
                   child: Hero(
-                    tag: '${data.pics[index].originUrl}$index',
+                    tag: '${data.sharedImages[index].path}$index',
                     child: RoundedNetImage(
-                      data.pics[index].originUrl,
+                      data.sharedImages[index].path,
                       fit: BoxFit.cover,
                       radius: 5,
                     ),
@@ -129,7 +133,7 @@ class _EventPageState extends State<EventPage>
               },
             );
             return w;
-          }, childCount: data.pics.length),
+          }, childCount: data.sharedImages.length),
         ),
       );
     }
@@ -143,7 +147,7 @@ class _EventPageState extends State<EventPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           RoundImgWidget(
-            data.user.avatarUrl,
+            data.poster.image!=null? data.poster.image.path:null,
             80,
           ),
           HEmptyView(10),
@@ -162,41 +166,33 @@ class _EventPageState extends State<EventPage>
                           title,
                           VEmptyView(5),
                           Text(
-                            DateUtil.formatDateMs(data.eventTime,
+                            DateUtil.formatDateMs(data.time,
                                 format: 'MM月dd日 HH:mm'),
                             style: smallGrayTextStyle,
                           ),
                         ],
                       ),
                     ),
-                    data.user.followed
-                        ? Chip(
-                            label: Text(
-                              '取消关注',
-                              style: common14WhiteTextStyle,
-                            ),
-                            backgroundColor: Colors.orange[700],
-                          )
-                        : Chip(
-                            labelPadding: EdgeInsets.only(
-                                right: ScreenUtil().setWidth(15)),
-                            avatar: Icon(
-                              Icons.add,
-                              size: ScreenUtil().setWidth(30),
-                              color: Colors.white,
-                            ),
-                            backgroundColor: Colors.orange[700],
-                            label: Text(
-                              '关注',
-                              style: common14WhiteTextStyle,
-                            ))
+//                    Chip(
+//                            labelPadding: EdgeInsets.only(
+//                                right: ScreenUtil().setWidth(15)),
+//                            avatar: Icon(
+//                              Icons.add,
+//                              size: ScreenUtil().setWidth(30),
+//                              color: Colors.white,
+//                            ),
+//                            backgroundColor: Colors.orange[700],
+//                            label: Text(
+//                              '拉黑',
+//                              style: common14WhiteTextStyle,
+//                            ))
                   ],
                 ),
                 VEmptyView(10),
-                contentData == null
+                data == null
                     ? Container()
                     : ExtendedText(
-                        contentData.msg ?? "",
+                        data.content ?? "",
                         specialTextSpanBuilder: EventSpecialTextSpanBuilder(),
                         style: TextStyle(
                             fontSize: 15, color: Colors.black87, height: 1.5),
@@ -210,7 +206,7 @@ class _EventPageState extends State<EventPage>
                         child: content,
                       ),
                 VEmptyView(20),
-                _buildCommonBottomBar(data),
+                _buildCommonBottomBar(data,1),
               ],
             ),
           )
@@ -220,29 +216,30 @@ class _EventPageState extends State<EventPage>
   }
 
   // 构建通用底部bar
-  Widget _buildCommonBottomBar(Event data) {
+  Widget _buildCommonBottomBar(Post data,int replyCount) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+//        Expanded(
+//          flex: 2,
+//          child: Row(
+//            mainAxisSize: MainAxisSize.min,
+//            children: <Widget>[
+//              Image.asset(
+//                'images/icon_event_share.png',
+//                width: ScreenUtil().setWidth(35),
+//              ),
+//              HEmptyView(5),
+//              Text(
+//                data.info.shareCount.toString(),
+//                style: common13GrayTextStyle,
+//              ),
+//              HEmptyView(40),
+//            ],
+//          ),
+//        ),
         Expanded(
-          flex: 2,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image.asset(
-                'images/icon_event_share.png',
-                width: ScreenUtil().setWidth(35),
-              ),
-              HEmptyView(5),
-              Text(
-                data.info.shareCount.toString(),
-                style: common13GrayTextStyle,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 2,
+          flex: 4,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -252,14 +249,14 @@ class _EventPageState extends State<EventPage>
               ),
               HEmptyView(5),
               Text(
-                data.info.commentCount.toString(),
+                replyCount.toString(),
                 style: common13GrayTextStyle,
               ),
             ],
           ),
         ),
         Expanded(
-          flex: 2,
+          flex: 4,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -269,7 +266,7 @@ class _EventPageState extends State<EventPage>
               ),
               HEmptyView(5),
               Text(
-                data.info.likedCount.toString(),
+                data.likeCount.toString(),
                 style: common13GrayTextStyle,
               ),
             ],
@@ -285,12 +282,12 @@ class _EventPageState extends State<EventPage>
     super.build(context);
 
     return RefreshIndicator(
-      child: LoadingMoreList(ListConfig<Event>(
+      child: LoadingMoreList(ListConfig<Post>(
           collectGarbage: (List<int> garbages) {
             garbages.forEach((index) {
-              eventRepository[index]
-                  .pics
-                  .map((p) => p.originUrl)
+              postRepository[index]
+                  .sharedImages
+                  .map((p) => p.path)
                   .toList()
                   .forEach((url) {
                 final provider = ExtendedNetworkImageProvider(url);
@@ -299,33 +296,34 @@ class _EventPageState extends State<EventPage>
             });
           },
           itemBuilder: (context, curData, index) {
-            EventContent curContent;
+            //没用
+            //var curContent;
             Widget contentWidget;
-            // type 35：纯文字， 39：video，18：song
+            // type 1：纯文字， 2：音乐，3：歌单
             switch (curData.type) {
-              case 35:
+              case 1:
                 break;
-              case 39:
-                curContent = EventContent.fromJson(json.decode(curData.json));
-                contentWidget = EventVideoWidget(curContent.video);
-                break;
-              case 18:
-                curContent = EventContent.fromJson(json.decode(curData.json));
-                contentWidget = EventSongWidget(prefix0.Song(curContent.song.id,
-                    name: curContent.song.name,
-                    picUrl: curContent.song.album.picUrl,
-                    artists:
-                        curContent.song.artists.map((a) => a.name).join('/')));
-                break;
+//              case 3:
+//                curContent = EventContent.fromJson(json.decode(curData.json));
+//                contentWidget = EventVideoWidget(curContent.video);
+//                break;
+//              case 2:
+//                curContent = EventContent.fromJson(json.decode(curData.json));
+//                contentWidget = EventSongWidget(prefix0.Song(curContent.song.id,
+//                    name: curContent.song.name,
+//                    picUrl: curContent.song.album.picUrl,
+//                    artists:
+//                        curContent.song.artists.map((a) => a.name).join('/')));
+//                break;
               default:
-                curContent = EventContent.fromJson(json.decode(curData.json));
+                //curContent = EventContent.fromJson(json.decode(curData.json));
                 break;
             }
-            return _buildCommonTemplate(curData, curContent, contentWidget);
+            return _buildCommonTemplate(curData, contentWidget);
           },
-          sourceList: eventRepository)),
+          sourceList: postRepository)),
       onRefresh: () async {
-        await eventRepository.refresh();
+        await postRepository.refresh();
       },
     );
   }

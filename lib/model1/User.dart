@@ -1,10 +1,12 @@
+import 'package:comical_music/model1/Image.dart';
+
 class User {
   int _id;
   String _username;
   bool _ban;
-  String _image;
+  Image _image;
 
-  User({int id, String username, bool ban, String image}) {
+  User({int id, String username, bool ban, Image image}) {
     this._id = id;
     this._username = username;
     this._ban = ban;
@@ -17,14 +19,14 @@ class User {
   set username(String username) => _username = username;
   bool get ban => _ban;
   set ban(bool ban) => _ban = ban;
-  String get image => _image;
-  set image(String image) => _image = image;
+  Image get image => _image;
+  set image(Image image) => _image = image;
 
   User.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _username = json['username'];
     _ban = json['ban'];
-    _image = json['image'];
+    _image = json['image']!=null? Image.fromJson(json['image']):Image(path:"images/icon_default.png");
   }
 
   Map<String, dynamic> toJson() {
@@ -32,7 +34,9 @@ class User {
     data['id'] = this._id;
     data['username'] = this._username;
     data['ban'] = this._ban;
-    data['image'] = this._image;
+    if(this._image!=null){
+      data['image'] = this._image.toJson();
+    }
     return data;
   }
 }

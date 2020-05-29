@@ -1,3 +1,4 @@
+import 'package:comical_music/utils/net_utils1.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
 import 'package:comical_music/model/song.dart';
@@ -70,6 +71,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     NetUtils.init();
+    NetUtils1.init();
     ScreenUtil.init(context, width: 750, height: 1334);
     final size = MediaQuery.of(context).size;
     Application.screenWidth = size.width;

@@ -37,10 +37,12 @@ class NetUtils {
   static Future<List<InternetAddress>> _fm10s =
       InternetAddress.lookup("ws.acgvideo.com");
 
+
   static void init() async {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     CookieJar cj = PersistCookieJar(dir: tempPath);
+    //assert(_dio!=null);
     _dio = Dio(BaseOptions(baseUrl: '$baseUrl:1020', followRedirects: false))
       ..interceptors.add(CookieManager(cj))
       ..interceptors

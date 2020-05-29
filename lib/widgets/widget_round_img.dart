@@ -14,11 +14,8 @@ class RoundImgWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(width / 2),
       child: img.startsWith('http')
-          ? Utils.showNetImage(img,
-              width: ScreenUtil().setWidth(width),
-              height: ScreenUtil().setWidth(width),
-              fit: fit)
-          : Image.asset(img, fit: fit,),
+                ? Utils.showNetImage(img, width: ScreenUtil().setWidth(width), height: ScreenUtil().setWidth(width), fit: fit)
+                : Image.asset(img, width: ScreenUtil().setWidth(width), height: ScreenUtil().setWidth(width), fit: fit),
     );
   }
 }
