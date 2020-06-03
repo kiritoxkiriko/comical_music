@@ -1,7 +1,8 @@
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:comical_music/model/song.dart';
-import 'package:comical_music/provider/play_songs_model.dart';
+import 'package:comical_music/provider/play_songs_model1.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/widgets/common_text_style.dart';
 import 'package:comical_music/widgets/h_empty_view.dart';
@@ -16,7 +17,7 @@ class EventSongWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PlaySongsModel>(
+    return Consumer<PlaySongsModel1>(
       builder: (context, model, _) {
         return GestureDetector(
           onTap: () {
@@ -34,7 +35,7 @@ class EventSongWidget extends StatelessWidget {
                 Stack(
                   children: <Widget>[
                     RoundedNetImage(
-                      song.picUrl,
+                      song.album.image.path,
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -66,7 +67,7 @@ class EventSongWidget extends StatelessWidget {
                       ),
                       VEmptyView(5),
                       Text(
-                        song.artists,
+                        Utils.convertSingerNames(song.singers),
                         style: common13GrayTextStyle,
                       ),
                     ],

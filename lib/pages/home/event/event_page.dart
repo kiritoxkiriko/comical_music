@@ -206,7 +206,7 @@ class _EventPageState extends State<EventPage>
                         child: content,
                       ),
                 VEmptyView(20),
-                _buildCommonBottomBar(data,1),
+                _buildCommonBottomBar(data),
               ],
             ),
           )
@@ -216,7 +216,7 @@ class _EventPageState extends State<EventPage>
   }
 
   // 构建通用底部bar
-  Widget _buildCommonBottomBar(Post data,int replyCount) {
+  Widget _buildCommonBottomBar(Post data) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -249,7 +249,7 @@ class _EventPageState extends State<EventPage>
               ),
               HEmptyView(5),
               Text(
-                replyCount.toString(),
+                data.replyCount.toString(),
                 style: common13GrayTextStyle,
               ),
             ],
@@ -307,14 +307,10 @@ class _EventPageState extends State<EventPage>
 //                curContent = EventContent.fromJson(json.decode(curData.json));
 //                contentWidget = EventVideoWidget(curContent.video);
 //                break;
-//              case 2:
-//                curContent = EventContent.fromJson(json.decode(curData.json));
-//                contentWidget = EventSongWidget(prefix0.Song(curContent.song.id,
-//                    name: curContent.song.name,
-//                    picUrl: curContent.song.album.picUrl,
-//                    artists:
-//                        curContent.song.artists.map((a) => a.name).join('/')));
-//                break;
+              case 2:
+                //curContent = EventContent.fromJson(json.decode(curData.json));
+                contentWidget = EventSongWidget(curData.sharedSongs[0]);
+                break;
               default:
                 //curContent = EventContent.fromJson(json.decode(curData.json));
                 break;

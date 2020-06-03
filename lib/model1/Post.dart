@@ -6,11 +6,11 @@ import 'package:comical_music/model1/UserSpace.dart';
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 
-import 'Image.dart';
-import 'Board.dart';
-import 'Song.dart';
-import 'SongList.dart';
-import 'User.dart';
+import 'package:comical_music/model1/Image.dart';
+import 'package:comical_music/model1/Board.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/SongList.dart';
+import 'package:comical_music/model1/User.dart';
 
 
 class PostRepository extends LoadingMoreBase<Post> {
@@ -71,6 +71,7 @@ class Post {
   int _likeCount;
   bool _exist;
   int _type;
+  int _replyCount;
 
   Post(
       {int id,
@@ -83,7 +84,8 @@ class Post {
         Board postedBoard,
         int likeCount,
         bool exist,
-        int type}) {
+        int type,
+        int replyCount}) {
     this._id = id;
     this._time = time;
     this._content = content;
@@ -95,6 +97,7 @@ class Post {
     this._likeCount = likeCount;
     this._exist = exist;
     this._type=type;
+    this._replyCount=replyCount;
   }
 
   int get id => _id;
@@ -118,7 +121,11 @@ class Post {
   set likeCount(int likeCount) => _likeCount = likeCount;
   bool get exist => _exist;
   set exist(bool exist) => _exist = exist;
+  int get replyCount => _replyCount;
 
+  set replyCount(int value) {
+    _replyCount = value;
+  }
 
   int get type => _type;
 
@@ -156,6 +163,7 @@ class Post {
     _likeCount = json['likeCount'];
     _exist = json['exist'];
     _type = json['type'];
+    _replyCount = json['replyCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -178,6 +186,7 @@ class Post {
     data['likeCount'] = this._likeCount;
     data['exist'] = this._exist;
     data['type'] = this._type;
+    data['replyCount'] = this._replyCount;
     return data;
   }
 }

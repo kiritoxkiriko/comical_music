@@ -1,10 +1,10 @@
 
 import 'dart:ui';
 
-import 'Song.dart';
-import 'Tag.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/Tag.dart';
 
-import 'User.dart';
+import 'package:comical_music/model1/User.dart';
 
 class SongList {
   int _id;

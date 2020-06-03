@@ -1,5 +1,5 @@
-import 'Image.dart';
-import 'Singer.dart';
+import 'package:comical_music/model1/Image.dart';
+import 'package:comical_music/model1/Singer.dart';
 
 class Album {
   int _id;
@@ -30,8 +30,9 @@ class Album {
   Album.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _name = json['name'];
-    _image = json['image'];
-    _singer = json['singer'];
+    _image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    _singer =
+    json['singer'] != null ? new Singer.fromJson(json['singer']) : null;
     _year = json['year'];
   }
 
@@ -39,8 +40,12 @@ class Album {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this._id;
     data['name'] = this._name;
-    data['image'] = this._image;
-    data['singer'] = this._singer;
+    if (this._image != null) {
+      data['image'] = this._image.toJson();
+    }
+    if (this._singer != null) {
+      data['singer'] = this._singer.toJson();
+    }
     data['year'] = this._year;
     return data;
   }

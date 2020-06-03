@@ -1,7 +1,7 @@
-import 'Album.dart';
-import 'Singer.dart';
-import 'Tag.dart';
-import 'User.dart';
+import 'package:comical_music/model1/Album.dart';
+import 'package:comical_music/model1/Singer.dart';
+import 'package:comical_music/model1/Tag.dart';
+import 'package:comical_music/model1/User.dart';
 
 class Song {
   int _id;
@@ -12,7 +12,6 @@ class Song {
   User _uploader;
   int _uploadTime;
   String _path;
-  String _lrcPath;
 
   Song(
       {int id,
@@ -22,8 +21,7 @@ class Song {
         Album album,
         User uploader,
         int uploadTime,
-        String path,
-        String lrcPath}) {
+        String path}) {
     this._id = id;
     this._name = name;
     this._tags = tags;
@@ -32,7 +30,6 @@ class Song {
     this._uploader = uploader;
     this._uploadTime = uploadTime;
     this._path = path;
-    this._lrcPath = lrcPath;
   }
 
   int get id => _id;
@@ -51,32 +48,48 @@ class Song {
   set uploadTime(int uploadTime) => _uploadTime = uploadTime;
   String get path => _path;
   set path(String path) => _path = path;
-  String get lrcPath => _lrcPath;
-  set lrcPath(String lrcPath) => _lrcPath = lrcPath;
 
   Song.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _name = json['name'];
-    _tags = json['tags'];
-    _singers = json['singers'];
-    _album = json['album'];
-    _uploader = json['uploader'];
+    if (json['tags'] != null) {
+      _tags = new List<Tag>();
+      json['tags'].forEach((v) {
+        _tags.add(new Tag.fromJson(v));
+      });
+    }
+    if (json['singers'] != null) {
+      _singers = new List<Singer>();
+      json['singers'].forEach((v) {
+        _singers.add(new Singer.fromJson(v));
+      });
+    }
+    _album = json['album'] != null ? new Album.fromJson(json['album']) : null;
+    _uploader = json['uploader'] != null
+        ? new User.fromJson(json['uploader'])
+        : null;
     _uploadTime = json['uploadTime'];
     _path = json['path'];
-    _lrcPath = json['lrcPath'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this._id;
     data['name'] = this._name;
-    data['tags'] = this._tags;
-    data['singers'] = this._singers;
-    data['album'] = this._album;
-    data['uploader'] = this._uploader;
+    if (this._tags != null) {
+      data['tags'] = this._tags.map((v) => v.toJson()).toList();
+    }
+    if (this._singers != null) {
+      data['singers'] = this._singers.map((v) => v.toJson()).toList();
+    }
+    if (this._album != null) {
+      data['album'] = this._album.toJson();
+    }
+    if (this._uploader != null) {
+      data['uploader'] = this._uploader.toJson();
+    }
     data['uploadTime'] = this._uploadTime;
     data['path'] = this._path;
-    data['lrcPath'] = this._lrcPath;
     return data;
   }
 }

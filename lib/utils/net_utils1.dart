@@ -33,7 +33,7 @@ import 'custom_log_interceptor.dart';
 class NetUtils1 {
   static Dio _dio;
   static final String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTEyNTg0NjcsInVzZXJuYW1lIjoiYWRtaW4ifQ.ltPr1PmGFCu3rnb8iN_IM5xjz9mJCkG0s_2_kslOM18";
-  static final String baseUrl = 'http://192.168.199.147:8088';
+  static final String baseUrl = 'http://192.168.1.124:8088';
   static Future<List<InternetAddress>> _fm10s =
   InternetAddress.lookup("ws.acgvideo.com");
 

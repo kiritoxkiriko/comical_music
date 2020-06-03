@@ -5,16 +5,15 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
-import 'package:comical_music/model/song.dart';
-import 'package:comical_music/model/user.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/User.dart';
 import 'package:comical_music/utils/fluro_convert_utils.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/utils/net_utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:comical_music/utils/utils.dart';
 
-
-class PlaySongsModel with ChangeNotifier{
+class PlaySongsModel1 with ChangeNotifier{
   AudioPlayer _audioPlayer = AudioPlayer();
   StreamController<String> _curPositionController = StreamController<String>.broadcast();
 
@@ -75,8 +74,8 @@ class PlaySongsModel with ChangeNotifier{
 
   /// 播放
   void play() async {
-    var songId = this._songs[curIndex].id;
-    var url = await NetUtils.getMusicURL(null, songId);
+    var song = this._songs[curIndex];
+    var url = song.path;
 
     _audioPlayer.play(url);
     saveCurSong();

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:comical_music/model1/Singer.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,5 +61,16 @@ class Utils {
       }
     }
     return 0;
+  }
+
+  ///转换singer名字
+  static String convertSingerNames(List<Singer> singers){
+    String s="";
+    singers.forEach((e) {
+      s+="/"+e.name;
+    });
+
+    s.replaceFirst("/", "");
+    return s;
   }
 }

@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'package:comical_music/model1/User.dart';
 
 class Reply {
   int _id;
