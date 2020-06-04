@@ -1,8 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:comical_music/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/application.dart';
-import 'package:comical_music/model/song.dart';
+import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/widgets/common_text_style.dart';
@@ -30,7 +31,7 @@ class PlayWidget extends StatelessWidget {
             },
             child: Row(
               children: <Widget>[
-                RoundImgWidget(curSong.picUrl, 80),
+                RoundImgWidget(curSong.album.image.path, 80),
                 HEmptyView(10),
                 Expanded(
                   child: Column(
@@ -38,7 +39,7 @@ class PlayWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(curSong.name, style: commonTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis,),
-                      Text(curSong.artists, style: common13TextStyle,),
+                      Text(Utils.convertSingerNames(curSong.singers), style: common13TextStyle,),
                     ],
                   ),
                 ),

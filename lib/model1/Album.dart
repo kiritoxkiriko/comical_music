@@ -1,4 +1,5 @@
 import 'package:comical_music/model1/Image.dart';
+import 'package:comical_music/model1/JsonObject.dart';
 import 'package:comical_music/model1/Singer.dart';
 
 class Album {
@@ -27,6 +28,7 @@ class Album {
   int get year => _year;
   set year(int year) => _year = year;
 
+  @override
   Album.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _name = json['name'];
@@ -36,6 +38,7 @@ class Album {
     _year = json['year'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this._id;

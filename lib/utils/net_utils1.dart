@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:comical_music/model1/PageResponseData.dart';
+import 'package:comical_music/model1/ResponseData.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/SongComment.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -13,7 +16,7 @@ import 'package:comical_music/model/lyric.dart';
 import 'package:comical_music/model/mv.dart';
 import 'package:comical_music/model/play_list.dart';
 import 'package:comical_music/model/recommend.dart';
-import 'package:comical_music/model/search_result.dart' hide User;
+import 'package:comical_music/model/search_result.dart' hide User,Song;
 import 'package:comical_music/model/song_comment.dart' hide User;
 import 'package:comical_music/model/song_detail.dart';
 import 'package:comical_music/model/top_list.dart';
@@ -32,17 +35,22 @@ import 'custom_log_interceptor.dart';
 
 class NetUtils1 {
   static Dio _dio;
-  static final String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTEyNTg0NjcsInVzZXJuYW1lIjoiYWRtaW4ifQ.ltPr1PmGFCu3rnb8iN_IM5xjz9mJCkG0s_2_kslOM18";
-  static final String baseUrl = 'http://192.168.1.124:8088';
+  static Dio _dioURL;
+  static final String token=Application.sp.getString("token");
+  static final String baseUrl = 'http://192.168.1.124:8088/api';
   static Future<List<InternetAddress>> _fm10s =
   InternetAddress.lookup("ws.acgvideo.com");
 
   static void init() async {
+
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     CookieJar cj = PersistCookieJar(dir: tempPath);
     _dio = Dio(BaseOptions(baseUrl: baseUrl, followRedirects: false))
       ..interceptors.add(CookieManager(cj))
+      ..interceptors
+          .add(LogInterceptor(responseBody: true, requestBody: true));
+    _dioURL = Dio()
       ..interceptors
           .add(LogInterceptor(responseBody: true, requestBody: true));
 
@@ -88,6 +96,76 @@ class NetUtils1 {
       print(params);
       assert(_dio!=null);
       return await _dio.get(url,queryParameters: params, options: options);
+    } on DioError catch (e) {
+      print('1');
+      if (e == null) {
+        print('2');
+        return Future.error(Response(data: -1));
+      } else if (e.response != null) {
+        if (e.response.statusCode !=200) {
+          _reLogin();
+          print('3');
+          return Future.error(Response(data: -1));
+        } else {
+          print('4');
+          return Future.value(e.response);
+        }
+      } else {
+        print('5');
+        return Future.error(Response(data: -1));
+      }
+    } finally {
+      Loading.hideLoading(context);
+    }
+  }
+
+  static Future<Response> _getURL(
+      BuildContext context,
+      String url, {
+        Map<String, dynamic> params,
+        bool isShowLoading = true,
+      }) async {
+    Options options=Options(headers: {HttpHeaders.authorizationHeader:token});
+    if (isShowLoading) Loading.showLoading(context);
+    try {
+      print(params);
+      assert(_dioURL!=null);
+      return await _dioURL.get(url,queryParameters: params, options: options);
+    } on DioError catch (e) {
+      print('1');
+      if (e == null) {
+        print('2');
+        return Future.error(Response(data: -1));
+      } else if (e.response != null) {
+        if (e.response.statusCode !=200) {
+          _reLogin();
+          print('3');
+          return Future.error(Response(data: -1));
+        } else {
+          print('4');
+          return Future.value(e.response);
+        }
+      } else {
+        print('5');
+        return Future.error(Response(data: -1));
+      }
+    } finally {
+      Loading.hideLoading(context);
+    }
+  }
+
+  static Future<Response> _post(
+      BuildContext context,
+      String url, {
+        Map<String, dynamic> params,
+        bool isShowLoading = true,
+      }) async {
+    Options options=Options(headers: {HttpHeaders.authorizationHeader:token});
+    if (isShowLoading) Loading.showLoading(context);
+    try {
+      print(params);
+      assert(_dio!=null);
+      return await _dio.post(url,queryParameters: params, options: options);
     } on DioError catch (e) {
       print('1');
       if (e == null) {
@@ -199,6 +277,12 @@ class NetUtils1 {
     return SongDetailData.fromJson(response.data);
   }
 
+  /// 获取歌曲
+  static Future<Song> getSong(BuildContext context, int songId) async{
+    var response = await _get(context, '/song/${songId.toString()}');
+    return Song.fromJson(response.data);
+  }
+
   /// ** 验证发现原来的歌单详情接口就有数据，不用请求两次！！ **
   /// 真正的歌单详情
   /// 因为歌单详情只能获取歌单信息，并不能获取到歌曲信息，所以要请求两个接口，先获取歌单详情，再获取歌曲详情
@@ -221,13 +305,12 @@ class NetUtils1 {
   }
 
   /// 获取评论列表
-  static Future<SongCommentData> getSongCommentData(
+  static Future<PageResponseData> getSongComment(
       BuildContext context, {
         @required Map<String, dynamic> params,
       }) async {
-    var response = await _get(context, '/comment/music',
-        params: params, isShowLoading: false);
-    return SongCommentData.fromJson(response.data);
+    var response = await _get(context, '/songComment/song/${params['songId']}', isShowLoading: false);
+    return PageResponseData.fromJson(response.data);
   }
 
   /// 获取评论列表
@@ -273,14 +356,26 @@ class NetUtils1 {
     return SongCommentData.fromJson(response.data);
   }
 
-  /// 获取歌词
-  static Future<LyricData> getLyricData(
+  /// 发送评论
+  static Future<SongComment> sendSongComment (
       BuildContext context, {
         @required Map<String, dynamic> params,
       }) async {
     var response =
-    await _get(context, '/lyric', params: params, isShowLoading: false);
-    return LyricData.fromJson(response.data);
+    await _post(context, '/songComment', params: params, isShowLoading: true);
+    return SongComment.fromJson(ResponseData.fromJson(response.data).data);
+  }
+
+
+
+  /// 获取歌词
+  static Future<String> getLyricData(
+      BuildContext context, {
+        @required String url
+      }) async {
+    var response =
+    await _getURL(context, url, isShowLoading: false);
+    return response.data;
   }
 
   /// 获取个人歌单
@@ -337,10 +432,10 @@ class NetUtils1 {
   }) async {
     var response;
     if(boardId==null){
-      response = await _get(null, '/api/post/all',
+      response = await _get(null, '/post/all',
           params: {'page': page} ,isShowLoading: false);
     }else{
-      response = await _get(null, '/api/post/board/${boardId}',
+      response = await _get(null, '/post/board/${boardId}',
           params: {'page': page}, isShowLoading: false);
     }
 

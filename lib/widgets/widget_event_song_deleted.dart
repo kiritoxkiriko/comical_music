@@ -1,5 +1,4 @@
 import 'package:comical_music/model1/Song.dart';
-import 'package:comical_music/utils/net_utils1.dart';
 import 'package:comical_music/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,22 +10,19 @@ import 'package:comical_music/widgets/rounded_net_image.dart';
 import 'package:comical_music/widgets/v_empty_view.dart';
 import 'package:provider/provider.dart';
 
-class EventSongWidget extends StatelessWidget {
-  final Song song;
+class EventDeletedSongWidget extends StatelessWidget {
+  //final Song song;
 
-  EventSongWidget(this.song);
-
+  EventDeletedSongWidget();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PlaySongsModel>(
       builder: (context, model, _) {
         return GestureDetector(
-          onTap: () async {
-            //var fullSong=await NetUtils1.getSong(context, this.song.id);
-            model.playSong(song);
-            //print(model);
-            NavigatorUtil.goPlaySongsPage(context);
+          onTap: () {
+            //model.playSong(song);
+            //NavigatorUtil.goPlaySongsPage(context);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -38,22 +34,22 @@ class EventSongWidget extends StatelessWidget {
               children: <Widget>[
                 Stack(
                   children: <Widget>[
-                    RoundedNetImage(
-                      song.album.image.path,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      radius: 5,
-                    ),
+//                    RoundedNetImage(
+//                      song.album.image.path,
+//                      width: 100,
+//                      height: 100,
+//                      fit: BoxFit.cover,
+//                      radius: 5,
+//                    ),
                     Container(
                       width: ScreenUtil().setWidth(100),
                       height: ScreenUtil().setWidth(100),
                       alignment: Alignment.center,
-                      child: Image.asset(
+                      /*child: Image.asset(
                         'images/icon_event_play.png',
                         width: ScreenUtil().setWidth(70),
                         height: ScreenUtil().setWidth(70),
-                      ),
+                      ),*/
                     ),
                   ],
                 ),
@@ -64,14 +60,14 @@ class EventSongWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        song.name,
+                        "歌曲已被删除",
                         style: commonTextStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       VEmptyView(5),
                       Text(
-                        Utils.convertSingerNames(song.singers),
+                        '',
                         style: common13GrayTextStyle,
                       ),
                     ],

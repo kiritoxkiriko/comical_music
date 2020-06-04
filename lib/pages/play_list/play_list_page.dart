@@ -162,18 +162,19 @@ class _PlayListPageState extends State<PlayListPage> {
                             alignment: Alignment.center,
                             child: Row(
                               children: <Widget>[
-                                FooterTabWidget('images/icon_comment.png',
-                                    '${_data == null ? "评论" : _data.commentCount}',
-                                        () {
-                                      NavigatorUtil.goCommentPage(context,
-                                          data: CommentHead(
-                                              _data.coverImgUrl,
-                                              _data.name,
-                                              _data.creator.nickname,
-                                              _data.commentCount,
-                                              _data.id,
-                                              CommentType.playList.index));
-                                    }),
+                                //TODO
+//                                FooterTabWidget('images/icon_comment.png',
+//                                    '${_data == null ? "评论" : _data.commentCount}',
+//                                        () {
+//                                      NavigatorUtil.goCommentPage(context,
+//                                          data: CommentHead(
+//                                              _data.coverImgUrl,
+//                                              _data.name,
+//                                              _data.creator.nickname,
+//                                              _data.commentCount,
+//                                              _data.id,
+//                                              CommentType.playList.index));
+//                                    }),
                                 FooterTabWidget(
                                     'images/icon_share.png',
                                     '${_data == null ? "分享" : _data.shareCount}',
@@ -229,17 +230,18 @@ class _PlayListPageState extends State<PlayListPage> {
   }
 
   void playSongs(PlaySongsModel model, int index) {
-    model.playSongs(
-      _data.tracks
-          .map((r) => Song(
-                r.id,
-                name: r.name,
-                picUrl: r.al.picUrl,
-                artists: '${r.ar.map((a) => a.name).toList().join('/')}',
-              ))
-          .toList(),
-      index: index,
-    );
+    //TODO
+//    model.playSongs(
+//      _data.tracks
+//          .map((r) => Song(
+//                r.id,
+//                name: r.name,
+//                picUrl: r.al.picUrl,
+//                artists: '${r.ar.map((a) => a.name).toList().join('/')}',
+//              ))
+//          .toList(),
+//      index: index,
+//    );
     NavigatorUtil.goPlaySongsPage(context);
   }
 

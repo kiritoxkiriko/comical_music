@@ -1,5 +1,6 @@
 import 'package:comical_music/model/event_content.dart';
 
+import 'JsonObject.dart';
 import 'User.dart';
 
 class SongComment {
@@ -46,8 +47,12 @@ class SongComment {
   SongComment.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _content = json['content'];
-    _replier = json['replier'];
-    _replyTo = json['replyTo'];
+    if(json['replier']!=null) {
+      _replier = User.fromJson(json['replier']);
+    }
+    if(json['replyTo']!=null){
+      _replyTo = SongComment.fromJson(json['replyTo']);
+    }
     _time = json['time'];
     _likeCount = json['likeCount'];
     _exist = json['exist'];

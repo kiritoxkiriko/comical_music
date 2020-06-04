@@ -12,6 +12,7 @@ class Routes {
   static String topList = "/top_list";
   static String playSongs = "/play_songs";
   static String comment = "/comment";
+  static String songComment = "/songComment";
   static String search = "/search";
   static String lookImg = "/look_img";
   static String userDetail = "/user_detail";
@@ -30,6 +31,7 @@ class Routes {
     router.define(topList, handler: topListHandler);
     router.define(playSongs, handler: playSongsHandler);
     router.define(comment, handler: commentHandler);
+    router.define(songComment, handler: songCommentHandler);
     router.define(search, handler: searchHandler);
     router.define(lookImg, handler: lookImgHandler);
     router.define(userDetail, handler: userDetailHandler);

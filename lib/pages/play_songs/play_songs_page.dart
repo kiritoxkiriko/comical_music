@@ -1,15 +1,17 @@
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:comical_music/model1/PageResponseData.dart';
+import 'package:comical_music/utils/net_utils1.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/application.dart';
 import 'package:comical_music/model/comment_head.dart';
-import 'package:comical_music/model/song.dart';
-import 'package:comical_music/model/song_comment.dart';
-import 'package:comical_music/pages/comment/comment_type.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/SongComment.dart';
+//import 'package:comical_music/pages/comment/comment_type.dart';
 import 'package:comical_music/pages/play_songs/widget_lyric.dart';
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/utils/navigator_util.dart';
@@ -74,7 +76,7 @@ class _PlaySongsPageState extends State<PlaySongsPage>
         body: Stack(
           children: <Widget>[
             Utils.showNetImage(
-              '${curSong.picUrl}?param=200y200',
+              curSong.album.image.path,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.fitHeight,
@@ -104,7 +106,7 @@ class _PlaySongsPageState extends State<PlaySongsPage>
                     style: commonWhiteTextStyle,
                   ),
                   Text(
-                    model.curSong.artists,
+                    Utils.convertSingerNames(model.curSong.singers),
                     style: smallWhite70TextStyle,
                   ),
                 ],
@@ -144,7 +146,7 @@ class _PlaySongsPageState extends State<PlaySongsPage>
                                           'images/bet.png',
                                           width: ScreenUtil().setWidth(550),
                                         ),
-                                        RoundImgWidget('${curSong.picUrl}?param=200y200', 370),
+                                        RoundImgWidget(curSong.album.image.path, 370),
                                       ],
                                     ),
                                   ),
@@ -199,24 +201,26 @@ class _PlaySongsPageState extends State<PlaySongsPage>
       child: Row(
         children: <Widget>[
           ImageMenuWidget('images/icon_dislike.png', 80),
-          ImageMenuWidget(
-            'images/icon_song_download.png',
-            80,
-            onTap: () {},
-          ),
-          ImageMenuWidget(
-            'images/bfc.png',
-            80,
-            onTap: () {},
-          ),
+//          ImageMenuWidget(
+//            'images/icon_song_download.png',
+//            80,
+//            onTap: () {},
+//          ),
+//          ImageMenuWidget(
+//            'images/bfc.png',
+//            80,
+//            onTap: () {},
+//          ),
           Expanded(
             child: Align(
               child: Container(
                 width: ScreenUtil().setWidth(130),
                 height: ScreenUtil().setWidth(80),
-                child: CustomFutureBuilder<SongCommentData>(
-                  futureFunc: NetUtils.getSongCommentData,
-                  params: {'id': model.curSong.id, 'offset': 1},
+                child: CustomFutureBuilder<PageResponseData>(
+                  futureFunc: NetUtils1.getSongComment,
+                  params: {
+                    'songId': model.curSong.id,
+                  },
                   loadingWidget: Image.asset(
                     'images/icon_song_comment.png',
                     width: ScreenUtil().setWidth(80),
@@ -225,7 +229,7 @@ class _PlaySongsPageState extends State<PlaySongsPage>
                   builder: (context, data) {
                     return GestureDetector(
                       onTap: () {
-                        NavigatorUtil.goCommentPage(context, data: CommentHead(model.curSong.picUrl, model.curSong.name, model.curSong.artists, data.total, model.curSong.id, CommentType.song.index));
+                        NavigatorUtil.goSongCommentPage(context, song: model.curSong);
                       },
                       child: Stack(
                         alignment: Alignment.center,
@@ -241,7 +245,7 @@ class _PlaySongsPageState extends State<PlaySongsPage>
                               margin: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
                               width: ScreenUtil().setWidth(58),
                               child: Text(
-                                '${NumberUtils.formatNum(data.total)}',
+                                NumberUtils.formatNum(data.totalElements),
                                 style: common10White70TextStyle,
                               ),
                             ),

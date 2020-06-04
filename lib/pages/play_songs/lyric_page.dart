@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/utils/net_utils1.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/application.dart';
-import 'package:comical_music/model/lyric.dart';
+import 'package:comical_music/model1/Lyric.dart';
 import 'package:comical_music/pages/play_songs/widget_lyric.dart';
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/utils/net_utils.dart';
@@ -22,10 +24,10 @@ class LyricPage extends StatefulWidget {
 
 class _LyricPageState extends State<LyricPage> with TickerProviderStateMixin {
   LyricWidget _lyricWidget;
-  LyricData _lyricData;
+  String _lyricData;
   List<Lyric> lyrics;
   AnimationController _lyricOffsetYController;
-  int curSongId;
+  Song curSong;
   Timer dragEndTimer; // 拖动结束任务
   Function dragEndFunc;
   Duration dragEndDuration = Duration(milliseconds: 1000);
@@ -34,7 +36,7 @@ class _LyricPageState extends State<LyricPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((call) {
-      curSongId = widget.model.curSong.id;
+      curSong = widget.model.curSong;
       _request();
     });
 
@@ -49,9 +51,11 @@ class _LyricPageState extends State<LyricPage> with TickerProviderStateMixin {
 
   void _request() async {
     _lyricData =
-        await NetUtils.getLyricData(context, params: {'id': curSongId});
+        await NetUtils1.getLyricData(context, url: curSong.lrcPath);
+    //(_lyricData);
     setState(() {
-      lyrics = Utils.formatLyric(_lyricData.lrc.lyric);
+      lyrics = Utils.formatLyric(_lyricData);
+      //print(lyrics);
       _lyricWidget = LyricWidget(lyrics, 0);
     });
   }
@@ -60,9 +64,9 @@ class _LyricPageState extends State<LyricPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     print('lyric_build');
     // 当前歌的id变化之后要重新获取歌词
-    if (curSongId != widget.model.curSong.id) {
+    if (curSong.id != widget.model.curSong.id) {
       lyrics = null;
-      curSongId = widget.model.curSong.id;
+      curSong = widget.model.curSong;
       _request();
     }
 

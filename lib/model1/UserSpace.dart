@@ -1,5 +1,7 @@
 import 'package:comical_music/model1/SongList.dart';
 
+import 'JsonObject.dart';
+
 class UserSpace {
   int _id;
   String _information;

@@ -6,7 +6,9 @@ import 'package:comical_music/model1/Tag.dart';
 
 import 'package:comical_music/model1/User.dart';
 
-class SongList {
+import 'JsonObject.dart';
+
+class SongList  {
   int _id;
   String _name;
   List<Tag> _tags;
@@ -16,6 +18,7 @@ class SongList {
   List<Song> _songs;
   Image _image;
   bool _open;
+  bool _exist;
 
   SongList(
       {int id,
@@ -26,7 +29,9 @@ class SongList {
         int time,
         List<Song> songs,
         Image image,
-        bool open}) {
+        bool open,
+        bool exist
+      }) {
     this._id = id;
     this._name = name;
     this._tags = tags;
@@ -36,6 +41,7 @@ class SongList {
     this._songs = songs;
     this._image = image;
     this._open = open;
+    this._exist=exist;
   }
 
   int get id => _id;
@@ -57,6 +63,13 @@ class SongList {
   bool get open => _open;
   set open(bool open) => _open = open;
 
+
+  bool get exist => _exist;
+
+  set exist(bool value) {
+    _exist = value;
+  }
+
   SongList.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _name = json['name'];
@@ -67,6 +80,7 @@ class SongList {
     _songs = json['songs'];
     _image = json['image'];
     _open = json['open'];
+    _exist=json['exist'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +94,15 @@ class SongList {
     data['songs'] = this._songs;
     data['image'] = this._image;
     data['open'] = this._open;
+    data['exist']=this._exist;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SongList && runtimeType == other.runtimeType && _id == other._id;
+
+  @override
+  int get hashCode => _id.hashCode;
 }

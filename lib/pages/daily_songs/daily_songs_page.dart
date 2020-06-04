@@ -119,17 +119,18 @@ class _DailySongsPageState extends State<DailySongsPage> {
   }
 
   void playSongs(PlaySongsModel model, int index) {
-    model.playSongs(
-      data.recommend
-          .map((r) => Song(
-                r.id,
-                name: r.name,
-                picUrl: r.album.picUrl,
-                artists: '${r.artists.map((a) => a.name).toList().join('/')}',
-              ))
-          .toList(),
-      index: index,
-    );
+    //TODO
+//    model.playSongs(
+//      data.recommend
+//          .map((r) => Song(
+//                r.id,
+//                name: r.name,
+//                picUrl: r.album.picUrl,
+//                artists: '${r.artists.map((a) => a.name).toList().join('/')}',
+//              ))
+//          .toList(),
+//      index: index,
+//    );
     NavigatorUtil.goPlaySongsPage(context);
   }
 

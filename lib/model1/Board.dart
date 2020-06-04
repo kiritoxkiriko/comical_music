@@ -1,3 +1,5 @@
+import 'package:comical_music/model1/JsonObject.dart';
+
 class Board {
   int _id;
   String _name;

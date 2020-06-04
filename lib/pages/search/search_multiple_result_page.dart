@@ -82,7 +82,8 @@ class _SearchMultipleResultPageState extends State<SearchMultipleResultPage>
                 artists:
                     song.songs[i].ar.map((a) => a.name).toList().join('/')),
             onTap: () {
-              _playSongs(model, song.songs, i);
+              //TODO
+              //_playSongs(model, song.songs, i);
             },
           ));
         }
@@ -97,7 +98,8 @@ class _SearchMultipleResultPageState extends State<SearchMultipleResultPage>
             ],
             titleTrail: GestureDetector(
               onTap: () {
-                _playSongs(model, song.songs, 0);
+                //TODO
+                //_playSongs(model, song.songs, 0);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(
@@ -128,19 +130,19 @@ class _SearchMultipleResultPageState extends State<SearchMultipleResultPage>
       },
     );
   }
-
+//TODO
   void _playSongs(PlaySongsModel model, List<Songs> data, int index) {
-    model.playSongs(
-      data
-          .map((r) => prefix0.Song(
-                r.id,
-                name: r.name,
-                picUrl: r.al.picUrl,
-                artists: '${r.ar.map((a) => a.name).toList().join('/')}',
-              ))
-          .toList(),
-      index: index,
-    );
+//    model.playSongs(
+//      data
+//          .map((r) => prefix0.Song(
+//                r.id,
+//                name: r.name,
+//                picUrl: r.al.picUrl,
+//                artists: '${r.ar.map((a) => a.name).toList().join('/')}',
+//              ))
+//          .toList(),
+//      index: index,
+//    );
     NavigatorUtil.goPlaySongsPage(context);
   }
 

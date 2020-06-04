@@ -1,3 +1,5 @@
+import 'JsonObject.dart';
+
 class Tag {
   int _id;
   String _name;

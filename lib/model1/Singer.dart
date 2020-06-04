@@ -1,5 +1,7 @@
 import 'package:comical_music/model1/Image.dart';
 
+import 'JsonObject.dart';
+
 class Singer {
   int _id;
   String _name;

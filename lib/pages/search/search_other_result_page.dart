@@ -105,7 +105,8 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
             SliverToBoxAdapter(
               child: GestureDetector(
                 onTap: () {
-                  _playSongs(model, _songsData, 0);
+                  //TODO
+                  //_playSongs(model, _songsData, 0);
                 },
                 child: Row(
                   children: <Widget>[
@@ -132,7 +133,8 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
                   return GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      _playSongs(model, _songsData, index);
+                      //TODO
+                      //_playSongs(model, _songsData, index);
                     },
                     child: Padding(
                       padding: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
@@ -161,21 +163,21 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
       },
     );
   }
-
+//TODO
   void _playSongs(PlaySongsModel model, List<Songs> data, int index) {
-    model.playSongs(
-      data
-          .map((r) => prefix0.Song(
-                r.id,
-                name: r.name,
-                picUrl: r.album.picUrl.isEmpty
-                    ? r.album.artist.img1v1Url
-                    : r.album.picUrl,
-                artists: '${r.artists.map((a) => a.name).toList().join('/')}',
-              ))
-          .toList(),
-      index: index,
-    );
+//    model.playSongs(
+//      data
+//          .map((r) => prefix0.Song(
+//                r.id,
+//                name: r.name,
+//                picUrl: r.album.picUrl.isEmpty
+//                    ? r.album.artist.img1v1Url
+//                    : r.album.picUrl,
+//                artists: '${r.artists.map((a) => a.name).toList().join('/')}',
+//              ))
+//          .toList(),
+//      index: index,
+//    );
     NavigatorUtil.goPlaySongsPage(context);
   }
 

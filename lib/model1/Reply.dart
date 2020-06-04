@@ -1,5 +1,7 @@
 import 'package:comical_music/model1/User.dart';
 
+import 'JsonObject.dart';
+
 class Reply {
   int _id;
   String _content;

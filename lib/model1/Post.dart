@@ -12,6 +12,8 @@ import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongList.dart';
 import 'package:comical_music/model1/User.dart';
 
+import 'JsonObject.dart';
+
 
 class PostRepository extends LoadingMoreBase<Post> {
   int pageindex = 1;

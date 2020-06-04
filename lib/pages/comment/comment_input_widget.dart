@@ -41,7 +41,7 @@ class CommentInputWidget extends StatelessWidget {
                       onEditingComplete: sendComment,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "这一次也许就是你上热评了",
+                        hintText: "不来发个评论吗？",
                         hintStyle: common14GrayTextStyle,
                       ),
                     ),

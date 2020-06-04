@@ -1,8 +1,8 @@
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
-import 'package:comical_music/model/song.dart';
-import 'package:comical_music/model/user.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/User.dart';
 import 'package:comical_music/provider/play_list_model.dart';
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/provider/user_model.dart';
@@ -47,6 +47,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   void goPage() async{
     await Application.initSp();
+    Application.sp.setString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE4MjAwNTAsInVzZXJJZCI6MX0.HGWixbMas2scECd7ORUVi8o4WX-IspqWTMkxrbBZ-KM");
     UserModel userModel = Provider.of<UserModel>(context);
     userModel.initUser();
     PlaySongsModel playSongsModel = Provider.of<PlaySongsModel>(context);

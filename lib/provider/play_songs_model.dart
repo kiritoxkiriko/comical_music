@@ -5,14 +5,13 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
-import 'package:comical_music/model/song.dart';
-import 'package:comical_music/model/user.dart';
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/User.dart';
 import 'package:comical_music/utils/fluro_convert_utils.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/utils/net_utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:comical_music/utils/utils.dart';
-
 
 class PlaySongsModel with ChangeNotifier{
   AudioPlayer _audioPlayer = AudioPlayer();
@@ -57,8 +56,13 @@ class PlaySongsModel with ChangeNotifier{
 
   // 播放一首歌
   void playSong(Song song) {
-    _songs.insert(curIndex, song);
+    addSong(song);
     play();
+  }
+
+  void addSong(Song song){
+    if(!_songs.contains(song))
+      _songs.insert(curIndex, song);
   }
 
   // 播放很多歌
@@ -70,13 +74,16 @@ class PlaySongsModel with ChangeNotifier{
 
   // 添加歌曲
   void addSongs(List<Song> songs) {
-    this._songs.addAll(songs);
+    songs.forEach((element) {
+      if (_songs.contains(element))
+        _songs.add(element);
+    });
   }
 
   /// 播放
   void play() async {
-    var songId = this._songs[curIndex].id;
-    var url = await NetUtils.getMusicURL(null, songId);
+    var song = this._songs[curIndex];
+    var url = song.path;
 
     _audioPlayer.play(url);
     saveCurSong();
@@ -115,6 +122,7 @@ class PlaySongsModel with ChangeNotifier{
       curIndex++;
     }
     play();
+    saveCurSong();
   }
 
   void prePlay(){

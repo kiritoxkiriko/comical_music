@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/UserSpace.dart';
+import 'package:comical_music/utils/net_utils1.dart';
+import 'package:comical_music/widgets/widget_event_song_deleted.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:extended_text/extended_text.dart';
@@ -309,7 +311,13 @@ class _EventPageState extends State<EventPage>
 //                break;
               case 2:
                 //curContent = EventContent.fromJson(json.decode(curData.json));
-                contentWidget = EventSongWidget(curData.sharedSongs[0]);
+              //判断歌曲是否存在
+                if(curData.sharedSongs[0].exist){
+                  //这里要重新获取音乐链接，不然会缺少信息
+                  contentWidget = EventSongWidget(curData.sharedSongs[0]);
+                }else{
+                  contentWidget = EventDeletedSongWidget();
+                }
                 break;
               default:
                 //curContent = EventContent.fromJson(json.decode(curData.json));

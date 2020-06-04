@@ -1,7 +1,10 @@
+import 'package:comical_music/application.dart';
 import 'package:comical_music/model1/Album.dart';
 import 'package:comical_music/model1/Singer.dart';
 import 'package:comical_music/model1/Tag.dart';
 import 'package:comical_music/model1/User.dart';
+
+import 'JsonObject.dart';
 
 class Song {
   int _id;
@@ -12,6 +15,8 @@ class Song {
   User _uploader;
   int _uploadTime;
   String _path;
+  String _lrcPath;
+  bool _exist;
 
   Song(
       {int id,
@@ -21,7 +26,11 @@ class Song {
         Album album,
         User uploader,
         int uploadTime,
-        String path}) {
+        String path,
+        String lrcPath,
+        int commentCount,
+        bool exist
+      }) {
     this._id = id;
     this._name = name;
     this._tags = tags;
@@ -30,6 +39,8 @@ class Song {
     this._uploader = uploader;
     this._uploadTime = uploadTime;
     this._path = path;
+    this._exist=exist;
+    this._lrcPath=lrcPath;
   }
 
   int get id => _id;
@@ -46,8 +57,32 @@ class Song {
   set uploader(User uploader) => _uploader = uploader;
   int get uploadTime => _uploadTime;
   set uploadTime(int uploadTime) => _uploadTime = uploadTime;
-  String get path => _path;
-  set path(String path) => _path = path;
+  String get path {
+    var token = Application.sp.getString("token");
+    if(token!=null||token!=""){
+      return _path+"?token="+token;
+    }
+    return _path;
+  }
+  set path(String path){
+    _path = path;
+  }
+
+
+  String get lrcPath => _lrcPath;
+
+  set lrcPath(String value) {
+    _lrcPath = value;
+  }
+
+  bool get exist => _exist;
+
+  set exist(bool value) {
+    _exist = value;
+  }
+
+
+
 
   Song.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -70,6 +105,9 @@ class Song {
         : null;
     _uploadTime = json['uploadTime'];
     _path = json['path'];
+    _lrcPath = json['lrcPath'];
+    //_commentCount=json['commentCount'];
+    _exist=json['exist'];
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +128,17 @@ class Song {
     }
     data['uploadTime'] = this._uploadTime;
     data['path'] = this._path;
+    data['lrcPath'] = this._lrcPath;
+    //data['commentCount']=this.commentCount;
+    data['exist']=this._exist;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Song && runtimeType == other.runtimeType && _id == other._id;
+
+  @override
+  int get hashCode => _id.hashCode;
 }

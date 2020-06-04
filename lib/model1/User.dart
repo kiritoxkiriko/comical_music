@@ -1,5 +1,7 @@
 import 'package:comical_music/model1/Image.dart';
 
+import 'JsonObject.dart';
+
 class User {
   int _id;
   String _username;

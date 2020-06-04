@@ -4,7 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:comical_music/model/lyric.dart';
+import 'package:comical_music/model1/Lyric.dart';
 
 class Utils {
   static void showToast(String msg) {
@@ -29,18 +29,22 @@ class Utils {
         lyricStr.split("\n").where((r) => reg.hasMatch(r)).map((s) {
       String time = s.substring(0, s.indexOf(']'));
       String lyric = s.substring(s.indexOf(']') + 1);
-      time = s.substring(1, time.length - 1);
-      int hourSeparatorIndex = time.indexOf(":");
-      int minuteSeparatorIndex = time.indexOf(".");
+      time = s.substring(1, time.length );
+      int minSeparatorIndex = time.indexOf(":");
+      int millSeparatorIndex = time.indexOf(".");
+//      print(s);
+//      print(time);
+//      print((minSeparatorIndex + 1).toString()+":"+millSeparatorIndex.toString());
+//      print(time.substring(millSeparatorIndex + 1));
       return Lyric(
         lyric,
         startTime: Duration(
           minutes: int.parse(
-            time.substring(0, hourSeparatorIndex),
+            time.substring(0, minSeparatorIndex),
           ),
           seconds: int.parse(
-              time.substring(hourSeparatorIndex + 1, minuteSeparatorIndex)),
-          milliseconds: int.parse(time.substring(minuteSeparatorIndex + 1)),
+              time.substring(minSeparatorIndex + 1, (millSeparatorIndex<0? time.length : millSeparatorIndex))),
+          milliseconds: millSeparatorIndex<0? 0: int.parse(time.substring(millSeparatorIndex + 1,time.length)),
         ),
       );
     }).toList();
@@ -69,8 +73,7 @@ class Utils {
     singers.forEach((e) {
       s+="/"+e.name;
     });
-
-    s.replaceFirst("/", "");
+    s=s.replaceFirst("/", "");
     return s;
   }
 }

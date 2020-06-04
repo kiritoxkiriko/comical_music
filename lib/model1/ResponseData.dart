@@ -1,3 +1,5 @@
+import 'JsonObject.dart';
+
 class ResponseData {
   int _code;
   String _msg;

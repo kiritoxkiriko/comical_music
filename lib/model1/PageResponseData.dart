@@ -1,10 +1,10 @@
 import 'package:comical_music/model1/ResponseData.dart';
-
 class PageResponseData extends ResponseData{
   List<dynamic> _data;
   int _size;
   int _total;
   int _num;
+  int _totalElements;
   bool _hasNext;
 
   PageResponseData(
@@ -14,6 +14,7 @@ class PageResponseData extends ResponseData{
         int size,
         int total,
         int num,
+        int totalElements,
         bool hasNext}) {
     super.code = code;
     super.msg = msg;
@@ -21,6 +22,7 @@ class PageResponseData extends ResponseData{
     this._size = size;
     this._total = total;
     this._num = num;
+    this._totalElements=totalElements;
     this._hasNext = hasNext;
   }
 
@@ -39,6 +41,13 @@ class PageResponseData extends ResponseData{
   bool get hasNext => _hasNext;
   set hasNext(bool hasNext) => _hasNext = hasNext;
 
+
+  int get totalElements => _totalElements;
+
+  set totalElements(int value) {
+    _totalElements = value;
+  }
+
   PageResponseData.fromJson(Map<String, dynamic> json) {
     super.code = json['code'];
     super.msg = json['msg'];
@@ -52,6 +61,7 @@ class PageResponseData extends ResponseData{
     _total = json['total'];
     _num = json['num'];
     _hasNext = json['hasNext'];
+    _totalElements = json['totalElements'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +75,7 @@ class PageResponseData extends ResponseData{
     data['total'] = this._total;
     data['num'] = this._num;
     data['hasNext'] = this._hasNext;
+    data['totalElements'] = this._totalElements;
     return data;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:comical_music/model1/Song.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +60,16 @@ class NavigatorUtil {
 
   /// 评论页面
   static void goCommentPage(BuildContext context,
-      {@required CommentHead data}) {
+      {@required Song song}) {
     _navigateTo(context,
-        "${Routes.comment}?data=${FluroConvertUtils.object2string(data)}");
+        "${Routes.songComment}?song=${FluroConvertUtils.object2string(song)}");
+  }
+
+  /// 歌曲评论页面
+  static void goSongCommentPage(BuildContext context,
+      {@required Song song}) {
+    _navigateTo(context,
+        "${Routes.songComment}?song=${FluroConvertUtils.object2string(song)}");
   }
 
   /// 搜索页面

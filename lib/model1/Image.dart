@@ -1,3 +1,5 @@
+import 'JsonObject.dart';
+
 class Image {
   String _path;
 
