@@ -1,4 +1,6 @@
+import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/pages/comment/reply_page.dart';
 import 'package:comical_music/pages/comment/song_comment_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +74,12 @@ var songCommentHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
       String data = params['song'].first;
       return SongCommentPage(Song.fromJson(FluroConvertUtils.string2map(data)));
+    });
+
+var replyHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      String data = params['post'].first;
+      return ReplyPage(Post.fromJson(FluroConvertUtils.string2map(data)));
     });
 
 // 跳转到搜索页面

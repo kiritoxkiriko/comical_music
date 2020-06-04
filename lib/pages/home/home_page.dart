@@ -68,8 +68,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           indicator: UnderlineTabIndicator(),
                           controller: _tabController,
                           tabs: [
+                            //TODO
                             Tab(
                               text: '动态',
+//                              child: DropdownButton<String>(
+//                                hint: Text("动态"),
+//                                onChanged: (T){
+//
+//                                },
+//                                items: <DropdownMenuItem<String>>[
+//                                  DropdownMenuItem(
+//                                    child: Text("1"),
+//                                    value: "1",
+//                                  ),
+//                                  DropdownMenuItem(
+//                                    child: Text("2"),
+//                                    value: "12",
+//                                  ),
+//                                  DropdownMenuItem(
+//                                    child: Text("3"),
+//                                    value: "1",
+//                                  ),
+//
+//                                ],
+//                              ),
                             ),
                             Tab(
                               text: '发现',

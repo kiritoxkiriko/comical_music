@@ -22,6 +22,7 @@ class PostRepository extends LoadingMoreBase<Post> {
   PageResponseData _eventPage;
   @override
   bool get hasMore => _hasMore;
+  int _boardId;
 
   @override
   Future<bool> refresh([bool clearBeforeRequest = false]) async {
@@ -44,7 +45,7 @@ class PostRepository extends LoadingMoreBase<Post> {
         this.clear();
       }
 
-      var r = await NetUtils1.getPost(page: pageindex);
+      var r = await NetUtils1.getPost(page: pageindex,boardId: _boardId);
       _eventPage = r;
       r.data.forEach((element) {
         this.add(Post.fromJson(element));
@@ -58,6 +59,10 @@ class PostRepository extends LoadingMoreBase<Post> {
       print(stack);
     }
     return isSuccess;
+  }
+
+  set boardId(int boardId){
+    this._boardId=boardId;
   }
 }
 

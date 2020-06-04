@@ -25,4 +25,9 @@ class Board {
     data['name'] = this._name;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'Board{_name: $_name}';
+  }
 }

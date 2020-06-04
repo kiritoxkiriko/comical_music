@@ -46,8 +46,9 @@ class Reply {
   Reply.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _content = json['content'];
-    _replier = json['replier'];
-    _replyTo = json['replyTo'];
+
+    _replier = json['replier']!=null?User.fromJson(json['replier']):null;
+    _replyTo = json['replyTo']!=null?Reply.fromJson(json['replyTo']):null;
     _time = json['time'];
     _likeCount = json['likeCount'];
     _exist = json['exist'];
@@ -57,8 +58,10 @@ class Reply {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this._id;
     data['content'] = this._content;
-    data['replier'] = this._replier;
-    data['replyTo'] = this._replyTo;
+    if (this._replier!=null)
+      data['replier'] = this._replier.toJson();
+    if (this.replyTo!=null)
+      data['replyTo'] = this._replyTo.toJson();
     data['time'] = this._time;
     data['likeCount'] = this._likeCount;
     data['exist'] = this._exist;

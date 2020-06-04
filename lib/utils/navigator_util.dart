@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/Song.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluro/fluro.dart';
@@ -64,6 +65,13 @@ class NavigatorUtil {
     _navigateTo(context,
         "${Routes.songComment}?song=${FluroConvertUtils.object2string(song)}");
   }
+
+  static void goReplyPage(BuildContext context,
+      {@required Post post}) {
+    _navigateTo(context,
+        "${Routes.reply}?post=${FluroConvertUtils.object2string(post)}");
+  }
+
 
   /// 歌曲评论页面
   static void goSongCommentPage(BuildContext context,

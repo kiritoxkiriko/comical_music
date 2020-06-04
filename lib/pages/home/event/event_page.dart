@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/UserSpace.dart';
 import 'package:comical_music/utils/net_utils1.dart';
+import 'package:comical_music/widgets/widget_event_page_top_bar.dart';
 import 'package:comical_music/widgets/widget_event_song_deleted.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:extended_image/extended_image.dart';
@@ -241,22 +242,28 @@ class _EventPageState extends State<EventPage>
 //          ),
 //        ),
         Expanded(
-          flex: 4,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image.asset(
-                'images/icon_event_comment.png',
-                width: ScreenUtil().setWidth(35),
+            flex: 4,
+            child: GestureDetector(
+              onTap: (){
+                NavigatorUtil.goReplyPage(context, post: data);
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Image.asset(
+                    'images/icon_event_comment.png',
+                    width: ScreenUtil().setWidth(35),
+                  ),
+                  HEmptyView(5),
+                  Text(
+                    data.replyCount.toString(),
+                    style: common13GrayTextStyle,
+                  ),
+                ],
               ),
-              HEmptyView(5),
-              Text(
-                data.replyCount.toString(),
-                style: common13GrayTextStyle,
-              ),
-            ],
-          ),
+            )
         ),
+
         Expanded(
           flex: 4,
           child: Row(
@@ -282,56 +289,107 @@ class _EventPageState extends State<EventPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    return RefreshIndicator(
-      child: LoadingMoreList(ListConfig<Post>(
-          collectGarbage: (List<int> garbages) {
-            garbages.forEach((index) {
-              postRepository[index]
-                  .sharedImages
-                  .map((p) => p.path)
-                  .toList()
-                  .forEach((url) {
-                final provider = ExtendedNetworkImageProvider(url);
-                provider.evict();
+    return GridTile(
+      header: WidgetEventPageTopBar(postRepository),
+      child: RefreshIndicator(
+        child: LoadingMoreList(ListConfig<Post>(
+            collectGarbage: (List<int> garbages) {
+              garbages.forEach((index) {
+                postRepository[index]
+                    .sharedImages
+                    .map((p) => p.path)
+                    .toList()
+                    .forEach((url) {
+                  final provider = ExtendedNetworkImageProvider(url);
+                  provider.evict();
+                });
               });
-            });
-          },
-          itemBuilder: (context, curData, index) {
-            //没用
-            //var curContent;
-            Widget contentWidget;
-            // type 1：纯文字， 2：音乐，3：歌单
-            switch (curData.type) {
-              case 1:
-                break;
+            },
+            itemBuilder: (context, curData, index) {
+              //没用
+              //var curContent;
+              Widget contentWidget;
+              // type 1：纯文字， 2：音乐，3：歌单
+              switch (curData.type) {
+                case 1:
+                  break;
 //              case 3:
 //                curContent = EventContent.fromJson(json.decode(curData.json));
 //                contentWidget = EventVideoWidget(curContent.video);
 //                break;
-              case 2:
+                case 2:
                 //curContent = EventContent.fromJson(json.decode(curData.json));
-              //判断歌曲是否存在
-                if(curData.sharedSongs[0].exist){
-                  //这里要重新获取音乐链接，不然会缺少信息
-                  contentWidget = EventSongWidget(curData.sharedSongs[0]);
-                }else{
-                  contentWidget = EventDeletedSongWidget();
-                }
-                break;
-              default:
+                //判断歌曲是否存在
+                  if (curData.sharedSongs[0].exist) {
+                    //这里要重新获取音乐链接，不然会缺少信息
+                    contentWidget = EventSongWidget(curData.sharedSongs[0]);
+                  } else {
+                    contentWidget = EventDeletedSongWidget();
+                  }
+                  break;
+                default:
                 //curContent = EventContent.fromJson(json.decode(curData.json));
-                break;
-            }
-            return _buildCommonTemplate(curData, contentWidget);
-          },
-          sourceList: postRepository)),
-      onRefresh: () async {
-        await postRepository.refresh();
-      },
+                  break;
+              }
+              return _buildCommonTemplate(curData, contentWidget);
+            },
+            sourceList: postRepository)),
+        onRefresh: () async {
+          await postRepository.refresh();
+        },
+      )
     );
+//    return RefreshIndicator(
+//      child: LoadingMoreList(ListConfig<Post>(
+//          collectGarbage: (List<int> garbages) {
+//            garbages.forEach((index) {
+//              postRepository[index]
+//                  .sharedImages
+//                  .map((p) => p.path)
+//                  .toList()
+//                  .forEach((url) {
+//                final provider = ExtendedNetworkImageProvider(url);
+//                provider.evict();
+//              });
+//            });
+//          },
+//          itemBuilder: (context, curData, index) {
+//            //没用
+//            //var curContent;
+//            Widget contentWidget;
+//            // type 1：纯文字， 2：音乐，3：歌单
+//            switch (curData.type) {
+//              case 1:
+//                break;
+////              case 3:
+////                curContent = EventContent.fromJson(json.decode(curData.json));
+////                contentWidget = EventVideoWidget(curContent.video);
+////                break;
+//              case 2:
+//                //curContent = EventContent.fromJson(json.decode(curData.json));
+//              //判断歌曲是否存在
+//                if(curData.sharedSongs[0].exist){
+//                  //这里要重新获取音乐链接，不然会缺少信息
+//                  contentWidget = EventSongWidget(curData.sharedSongs[0]);
+//                }else{
+//                  contentWidget = EventDeletedSongWidget();
+//                }
+//                break;
+//              default:
+//                //curContent = EventContent.fromJson(json.decode(curData.json));
+//                break;
+//            }
+//            return _buildCommonTemplate(curData, contentWidget);
+//          },
+//          sourceList: postRepository)),
+//      onRefresh: () async {
+//        await postRepository.refresh();
+//      },
+//    );
   }
 
   @override
   bool get wantKeepAlive => true;
 }
+
+

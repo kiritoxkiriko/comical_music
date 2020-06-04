@@ -23,11 +23,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> with AutomaticKeepAliveClientMixin {
   Map<String, String> topMenuData = {
-    '本地音乐': 'images/icon_music.png',
-    '最近播放': 'images/icon_late_play.png',
-    '下载管理': 'images/icon_download_black.png',
-    '我的电台': 'images/icon_broadcast.png',
-    '我的收藏': 'images/icon_collect.png',
+
   };
 
   List<String> topMenuKeys;
@@ -47,49 +43,49 @@ class _MyPageState extends State<MyPage> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  Widget _buildTopMenu() {
-    return ListView.separated(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        var curKey = topMenuKeys[index];
-        var curValue = topMenuData[topMenuKeys[index]];
-        return Container(
-          height: ScreenUtil().setWidth(110),
-          alignment: Alignment.center,
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: ScreenUtil().setWidth(140),
-                child: Align(
-                  child: Image.asset(
-                    curValue,
-                    width: ScreenUtil().setWidth(100),
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  curKey,
-                  style: commonTextStyle,
-                ),
-              )
-            ],
-          ),
-        );
-      },
-      separatorBuilder: (context, index) {
-        return Container(
-          color: Colors.grey,
-          margin: EdgeInsets.only(left: ScreenUtil().setWidth(140)),
-          height: ScreenUtil().setWidth(0.3),
-        );
-      },
-      itemCount: 5,
-    );
-  }
+//  Widget _buildTopMenu() {
+//    return ListView.separated(
+//      shrinkWrap: true,
+//      padding: EdgeInsets.zero,
+//      physics: NeverScrollableScrollPhysics(),
+//      itemBuilder: (context, index) {
+//        var curKey = topMenuKeys[index];
+//        var curValue = topMenuData[topMenuKeys[index]];
+//        return Container(
+//          height: ScreenUtil().setWidth(110),
+//          alignment: Alignment.center,
+//          child: Row(
+//            children: <Widget>[
+//              Container(
+//                width: ScreenUtil().setWidth(140),
+//                child: Align(
+//                  child: Image.asset(
+//                    curValue,
+//                    width: ScreenUtil().setWidth(100),
+//                    fit: BoxFit.fitWidth,
+//                  ),
+//                ),
+//              ),
+//              Expanded(
+//                child: Text(
+//                  curKey,
+//                  style: commonTextStyle,
+//                ),
+//              )
+//            ],
+//          ),
+//        );
+//      },
+//      separatorBuilder: (context, index) {
+//        return Container(
+//          color: Colors.grey,
+//          margin: EdgeInsets.only(left: ScreenUtil().setWidth(140)),
+//          height: ScreenUtil().setWidth(0.3),
+//        );
+//      },
+//      itemCount: 5,
+//    );
+//  }
 
   /// 构建「我创建的歌单」「收藏的歌单」
   Widget _buildPlayListItem(List<Playlist> data) {
@@ -239,7 +235,7 @@ class _MyPageState extends State<MyPage> with AutomaticKeepAliveClientMixin {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            _buildTopMenu(),
+            //_buildTopMenu(),
             Container(
               color: Color(0xfff5f5f5),
               height: ScreenUtil().setWidth(25),

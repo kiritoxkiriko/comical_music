@@ -116,7 +116,7 @@ class PlaySongsModel with ChangeNotifier{
 
   /// 下一首
   void nextPlay(){
-    if(curIndex >= _songs.length){
+    if(curIndex >= _songs.length-1){
       curIndex = 0;
     }else{
       curIndex++;

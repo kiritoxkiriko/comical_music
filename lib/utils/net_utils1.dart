@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:comical_music/model1/Board.dart';
 import 'package:comical_music/model1/PageResponseData.dart';
+import 'package:comical_music/model1/Reply.dart';
 import 'package:comical_music/model1/ResponseData.dart';
 import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongComment.dart';
@@ -309,7 +311,16 @@ class NetUtils1 {
       BuildContext context, {
         @required Map<String, dynamic> params,
       }) async {
-    var response = await _get(context, '/songComment/song/${params['songId']}', isShowLoading: false);
+    var response = await _get(context, '/songComment/song/${params['songId']}', isShowLoading: true);
+    return PageResponseData.fromJson(response.data);
+  }
+
+  /// 获取回复列表
+  static Future<PageResponseData> getReply(
+      BuildContext context, {
+        @required Map<String, dynamic> params,
+      }) async {
+    var response = await _get(context, '/reply/post/${params['postId']}', isShowLoading: true);
     return PageResponseData.fromJson(response.data);
   }
 
@@ -364,6 +375,16 @@ class NetUtils1 {
     var response =
     await _post(context, '/songComment', params: params, isShowLoading: true);
     return SongComment.fromJson(ResponseData.fromJson(response.data).data);
+  }
+
+  /// 回复
+  static Future<Reply> sendReply (
+      BuildContext context, {
+        @required Map<String, dynamic> params,
+      }) async {
+    var response =
+    await _post(context, '/reply', params: params, isShowLoading: true);
+    return Reply.fromJson(ResponseData.fromJson(response.data).data);
   }
 
 
@@ -463,6 +484,19 @@ class NetUtils1 {
     var response = await _get(null, '/user/detail',
         params: params, isShowLoading: false);
     return UserDetailData.fromJson(response.data);
+  }
+
+  static Future<List<Board>> getBoard(
+      BuildContext context,) async {
+    var response = await _get(null, '/board/all',
+         isShowLoading: false);
+    var data=ResponseData.fromJson(response.data);
+    List<Board> boards=[];
+    var list=data.data.toList();
+    list.forEach((e){
+      boards.add(Board.fromJson(e));
+    });
+    return boards;
   }
 
 }
