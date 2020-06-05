@@ -5,6 +5,7 @@ import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongComment.dart';
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,13 +56,7 @@ class _ReplyPageState extends State<ReplyPage> {
   void _request() async {
     replyPage = await NetUtils1.getReply(context, params: params);
     setState(() {
-//      if (r.hotComments != null && r.hotComments.isNotEmpty) {
-//        commentData.add(Comments(isTitle: true, title: "精彩评论"));
-//        commentData.addAll(r.hotComments);
-//      }
-//      if (commentData.where((d) => d.title == "最新评论").isEmpty) {
-//        commentData.add(Comments(isTitle: true, title: "最新评论"));
-//      }
+
       if (replyPage.totalElements > 0) {
         replyPage.data.forEach((element) {
           commentData.add(Reply.fromJson(element));
@@ -74,7 +69,11 @@ class _ReplyPageState extends State<ReplyPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return replyPage == null ? Container(
+      height: ScreenUtil().setWidth(400),
+      alignment: Alignment.center,
+      child: CupertinoActivityIndicator(),
+    ) :Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/SongList.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,16 @@ class NavigatorUtil {
     _navigateTo(context, Routes.dailySongs);
   }
 
-  /// 歌单详情
-  static void goPlayListPage(BuildContext context, {@required Recommend data}) {
+//  /// 歌单详情
+//  static void goPlayListPage(BuildContext context, {@required Recommend data}) {
+//    _navigateTo(context,
+//        "${Routes.playList}?data=${FluroConvertUtils.object2string(data)}");
+//  }
+
+  ///歌单
+  static void goSongListPage(BuildContext context, {@required SongList data}) {
     _navigateTo(context,
-        "${Routes.playList}?data=${FluroConvertUtils.object2string(data)}");
+        "${Routes.songList}?songList=${FluroConvertUtils.object2string(data)}");
   }
 
   /// 排行榜首页

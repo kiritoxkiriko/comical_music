@@ -5,6 +5,8 @@ import 'package:comical_music/model1/UserSpace.dart';
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:comical_music/widgets/widget_event_page_top_bar.dart';
 import 'package:comical_music/widgets/widget_event_song_deleted.dart';
+import 'package:comical_music/widgets/widget_event_song_list.dart';
+import 'package:comical_music/widgets/widget_event_song_list_deleted.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:extended_text/extended_text.dart';
@@ -325,6 +327,15 @@ class _EventPageState extends State<EventPage>
                     contentWidget = EventSongWidget(curData.sharedSongs[0]);
                   } else {
                     contentWidget = EventDeletedSongWidget();
+                  }
+                  break;
+                case 3:
+                //curContent = EventContent.fromJson(json.decode(curData.json));
+                //判断歌曲是否存在
+                  if (curData.sharedSongLists[0].exist) {
+                    contentWidget = EventSongListWidget(curData.sharedSongLists[0]);
+                  } else {
+                    contentWidget = EventDeletedSongListWidget();
                   }
                   break;
                 default:

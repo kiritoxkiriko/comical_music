@@ -1,7 +1,9 @@
 import 'package:comical_music/model1/Post.dart';
 import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/model1/SongList.dart';
 import 'package:comical_music/pages/comment/reply_page.dart';
 import 'package:comical_music/pages/comment/song_comment_page.dart';
+import 'package:comical_music/pages/play_list/song_list_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/model/comment_head.dart';
@@ -11,7 +13,6 @@ import 'package:comical_music/pages/daily_songs/daily_songs_page.dart';
 import 'package:comical_music/pages/home/home_page.dart';
 import 'package:comical_music/pages/login_page.dart';
 import 'package:comical_music/pages/look_img_page.dart';
-import 'package:comical_music/pages/play_list/play_list_page.dart';
 import 'package:comical_music/pages/play_songs/play_songs_page.dart';
 import 'package:comical_music/pages/search/search_page.dart';
 import 'package:comical_music/pages/splash_page.dart';
@@ -44,10 +45,10 @@ var dailySongsHandler = new Handler(
     });
 
 // 跳转到歌单
-var playListHandler = new Handler(
+var songListHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      String data = params['data'].first;
-      return PlayListPage(Recommend.fromJson(FluroConvertUtils.string2map(data)));
+      String data = params['songList'].first;
+      return SongListPage(SongList.fromJson(FluroConvertUtils.string2map(data)));
     });
 
 // 跳转到每日推荐歌曲

@@ -1,7 +1,9 @@
+import 'package:comical_music/model1/SongList.dart';
+import 'package:comical_music/provider/song_list_model.dart';
+import 'package:comical_music/utils/net_utils1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/model/play_list.dart';
-import 'package:comical_music/provider/play_list_model.dart';
 import 'package:comical_music/provider/user_model.dart';
 import 'package:comical_music/utils/net_utils.dart';
 import 'package:comical_music/utils/utils.dart';
@@ -9,10 +11,13 @@ import 'package:comical_music/widgets/common_text_style.dart';
 import 'package:comical_music/widgets/widget_edit_play_list.dart';
 
 class PlayListMenuWidget extends StatefulWidget {
-  final Playlist _playlist;
-  final PlayListModel _model;
+  final SongList _songList;
+  final SongListModel _model;
 
-  PlayListMenuWidget(this._playlist, this._model);
+  PlayListMenuWidget(this._songList, this._model){
+    //print("asdasdasdasdas");
+    //print(this._model==null);
+  }
 
   @override
   _PlayListMenuWidgetState createState() => _PlayListMenuWidgetState();
@@ -66,7 +71,7 @@ class _PlayListMenuWidgetState extends State<PlayListMenuWidget> {
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(40)),
             alignment: Alignment.centerLeft,
             child: Text(
-              '歌单：${widget._playlist.name}',
+              '歌单：${widget._songList.name}',
               style: common14GrayTextStyle,
             ),
           ),
@@ -75,18 +80,7 @@ class _PlayListMenuWidgetState extends State<PlayListMenuWidget> {
             color: Colors.black26,
           ),
           Offstage(
-            offstage: widget._playlist.creator.userId != widget._model.user.account.id,
-            child: _buildMenuItem('images/icon_edit.png', '编辑歌单信息', () {
-
-              showDialog(context: context, builder: (context){
-                return EditPlayListWidget(submitCallback: (String name, String desc) {
-
-                }, playlist: widget._playlist,);
-              });
-            }),
-          ),
-          Offstage(
-            offstage: widget._playlist.creator.userId != widget._model.user.account.id,
+            offstage: widget._model.isMine(widget._songList),
             child: Container(
               color: Colors.grey,
               margin: EdgeInsets.only(left: ScreenUtil().setWidth(140)),
@@ -94,11 +88,12 @@ class _PlayListMenuWidgetState extends State<PlayListMenuWidget> {
             ),
           ),
           _buildMenuItem('images/icon_del.png', '删除', () async {
-            NetUtils.deletePlaylist(context, params: {'id': widget._playlist.id}).then((v){
-              if(v.code == 200) Navigator.pop(context, widget._playlist..type = 1);
+            NetUtils1.deleteFavroteSongList(context, widget._songList.id).then((v){
+              if(v != null&&v==true) Navigator.pop(context, true);
               else Utils.showToast('删除失败，请重试');
             });
           }),
+
           Container(
             color: Colors.grey,
             margin: EdgeInsets.only(left: ScreenUtil().setWidth(140)),

@@ -1,3 +1,5 @@
+import 'package:comical_music/model1/Song.dart';
+import 'package:comical_music/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/model/music.dart';
@@ -9,10 +11,11 @@ import 'common_text_style.dart';
 import 'h_empty_view.dart';
 
 class WidgetMusicListItem extends StatelessWidget {
-  final MusicData _data;
+  final Song _data;
+  final int _index;
   final VoidCallback onTap;
 
-  WidgetMusicListItem(this._data, {this.onTap});
+  WidgetMusicListItem(this._data, this._index, {this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +29,29 @@ class WidgetMusicListItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _data.index == null && _data.picUrl == null
+            _index == null && _data.album.image.path == null
                 ? Container()
                 : HEmptyView(15),
-            _data.picUrl == null
-                ? Container()
-                : RoundedNetImage(
-                    '${_data.picUrl}?param=150y150',
-                    width: 100,
-                    height: 100,
-                    radius: 5,
-                  ),
-            _data.index == null
+//            _data.album.image.path == null
+//                ? Container()
+//                : RoundedNetImage(
+//                    _data.album.image.path,
+//                    width: 100,
+//                    height: 100,
+//                    radius: 5,
+//                  ),
+            _index == null
                 ? Container()
                 : Container(
                     alignment: Alignment.center,
                     width: ScreenUtil().setWidth(60),
                     height: ScreenUtil().setWidth(50),
                     child: Text(
-                      _data.index.toString(),
+                      _index.toString(),
                       style: mGrayTextStyle,
                     ),
                   ),
-            _data.index == null && _data.picUrl == null
+            _index == null && _data.album.image.path == null
                 ? Container()
                 : HEmptyView(10),
             Expanded(
@@ -57,14 +60,14 @@ class WidgetMusicListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    _data.songName,
+                    _data.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: commonTextStyle,
                   ),
                   VEmptyView(10),
                   Text(
-                    _data.artists,
+                    Utils.convertSingerNames(_data.singers),
                     style: smallGrayTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -74,18 +77,13 @@ class WidgetMusicListItem extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.center,
-              child: _data.mvid == 0
-                  ? Container()
-                  : IconButton(
-                      icon: Icon(Icons.play_circle_outline),
-                      onPressed: () {},
-                      color: Colors.grey,
-                    ),
+              child: Container()
             ),
             Align(
               alignment: Alignment.center,
               child: IconButton(
-                icon: Icon(Icons.more_vert),
+                icon: Icon(Icons.add),
+                //TODO 添加歌曲
                 onPressed: () {},
                 color: Colors.grey,
               ),

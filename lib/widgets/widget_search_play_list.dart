@@ -25,12 +25,13 @@ class SearchPlayListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        NavigatorUtil.goPlayListPage(context, data: Recommend(
-          id: id,
-          name: name,
-          picUrl: url,
-          playcount: playCount,
-        ));
+        //TODO
+//        NavigatorUtil.goPlayListPage(context, data: Recommend(
+//          id: id,
+//          name: name,
+//          picUrl: url,
+//          playcount: playCount,
+//        ));
       },
       child: Padding(
         padding:

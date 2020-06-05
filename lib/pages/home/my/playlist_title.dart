@@ -39,13 +39,14 @@ class _PlaylistTitleState extends State<PlaylistTitle> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          setState(() {
+          widget.count!=null? setState(() {
             if (arrow == arrows[0])
               arrow = arrows[1];
             else
               arrow = arrows[0];
             widget.onSwitchTap();
-          });
+          // ignore: unnecessary_statements
+          }):(){};
         },
         child: Row(
           children: <Widget>[
@@ -54,11 +55,11 @@ class _PlaylistTitleState extends State<PlaylistTitle> {
                 return ScaleTransition(child: child, scale: anim);
               },
               duration: Duration(milliseconds: 300),
-              child: Image.asset(
+              child: widget.count!=null?Image.asset(
                 arrow,
                 key: ValueKey(arrow),
                 width: ScreenUtil().setWidth(30),
-              ),
+              ):Container(),
             ),
             HEmptyView(10),
             Text(
@@ -67,23 +68,23 @@ class _PlaylistTitleState extends State<PlaylistTitle> {
             ),
             HEmptyView(5),
             Text(
-              '(${widget.count})',
+              widget.count==null?'':'(${widget.count})',
               style: common14GrayTextStyle,
             ),
             Spacer(),
             widget.trailing ?? Container(),
-            SizedBox(
-              height: ScreenUtil().setWidth(50),
-              width: ScreenUtil().setWidth(70),
-              child: IconButton(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Colors.black87,
-                ),
-                onPressed: widget.onMoreTap,
-                padding: EdgeInsets.zero,
-              ),
-            ),
+//            SizedBox(
+//              height: ScreenUtil().setWidth(50),
+//              width: ScreenUtil().setWidth(70),
+//              child: IconButton(
+//                icon: Icon(
+//                  Icons.more_vert,
+//                  color: Colors.black87,
+//                ),
+//                onPressed: widget.onMoreTap,
+//                padding: EdgeInsets.zero,
+//              ),
+//            ),
           ],
         ),
       ),

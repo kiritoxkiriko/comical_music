@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
 import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/User.dart';
-import 'package:comical_music/provider/play_list_model.dart';
+
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/provider/user_model.dart';
 import 'package:comical_music/utils/fluro_convert_utils.dart';
@@ -64,7 +64,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           NavigatorUtil.goHomePage(context);
         }
       });
-      Provider.of<PlayListModel>(context).user = userModel.user;
+      //Provider.of<P>(context).user = userModel.user;
     } else
       NavigatorUtil.goLoginPage(context);
   }

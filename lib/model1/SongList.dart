@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:comical_music/model1/Image.dart';
 import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/Tag.dart';
 
@@ -19,6 +20,8 @@ class SongList  {
   Image _image;
   bool _open;
   bool _exist;
+  int _addCount;
+  String _json;
 
   SongList(
       {int id,
@@ -30,7 +33,8 @@ class SongList  {
         List<Song> songs,
         Image image,
         bool open,
-        bool exist
+        bool exist,
+        int addCount,
       }) {
     this._id = id;
     this._name = name;
@@ -42,6 +46,7 @@ class SongList  {
     this._image = image;
     this._open = open;
     this._exist=exist;
+    this._addCount=addCount;
   }
 
   int get id => _id;
@@ -64,6 +69,12 @@ class SongList  {
   set open(bool open) => _open = open;
 
 
+  int get addCount => _addCount;
+
+  set addCount(int value) {
+    _addCount = value;
+  }
+
   bool get exist => _exist;
 
   set exist(bool value) {
@@ -71,30 +82,48 @@ class SongList  {
   }
 
   SongList.fromJson(Map<String, dynamic> json) {
+    _json=json.toString();
     _id = json['id'];
     _name = json['name'];
-    _tags = json['tags'];
+    if(json['tags']!=null){
+      List<Tag> tags=[];
+      json['tags'].forEach((e)=> tags.add(Tag.fromJson(e)));
+      _tags=tags;
+    }
     _introduction = json['introduction'];
-    _creator = json['creator'];
+    _creator = json['creator'] != null
+        ? new User.fromJson(json['creator'])
+        : null;
     _time = json['time'];
-    _songs = json['songs'];
-    _image = json['image'];
+    if(json['songs']!=null){
+      var list=json['songs'].toList();
+      List<Song> songs=[];
+      list.forEach((e)=> songs.add(Song.fromJson(e)));
+      _songs=songs;
+    }
+    _image = json['image']!=null ? Image.fromJson(json['image']) :null;
     _open = json['open'];
     _exist=json['exist'];
+    _addCount=json['addCount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this._id;
     data['name'] = this._name;
-    data['tags'] = this._tags;
+    if (data['tags']!=null)
+      data['tags'] = this._tags;
     data['introduction'] = this._introduction;
-    data['creator'] = this._creator;
+    if (data['creator']!=null)
+      data['creator'] = this._creator;
     data['time'] = this._time;
-    data['songs'] = this._songs;
-    data['image'] = this._image;
+    if(data['songs']!=null)
+      data['songs'] = this._songs;
+    if (data['image']!=null)
+      data['image'] = this._image;
     data['open'] = this._open;
     data['exist']=this._exist;
+    data['addCount']=this._addCount;
     return data;
   }
 
@@ -105,4 +134,9 @@ class SongList  {
 
   @override
   int get hashCode => _id.hashCode;
+
+  @override
+  String toString() {
+    return 'SongList{_id: $_id, _name: $_name, _tags: $_tags, _introduction: $_introduction, _creator: $_creator, _time: $_time, _songs: $_songs, _image: $_image, _open: $_open, _exist: $_exist, _addCount: $_addCount, _json: $_json}';
+  }
 }

@@ -32,8 +32,15 @@ class UserSpace {
   UserSpace.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _information = json['information'];
-    _favoriteSongs = json['favoriteSongs'];
-    _favoriteSongLists = json['favoriteSongLists'];
+    _favoriteSongs = json['favoriteSongs']!=null?SongList.fromJson(json['favoriteSongs']):null;
+    if(json['favoriteSongLists']!=null){
+      List<SongList> list=[];
+      json['favoriteSongLists'].forEach((e){
+        list.add(SongList.fromJson(e));
+      });
+      _favoriteSongLists=list;
+    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -43,5 +50,10 @@ class UserSpace {
     data['favoriteSongs'] = this._favoriteSongs;
     data['favoriteSongLists'] = this._favoriteSongLists;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'UserSpace{_id: $_id, _information: $_information, _favoriteSongs: $_favoriteSongs, _favoriteSongLists: $_favoriteSongLists}';
   }
 }

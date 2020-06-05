@@ -138,13 +138,14 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
                     },
                     child: Padding(
                       padding: EdgeInsets.only(left: ScreenUtil().setWidth(10)),
-                      child: WidgetMusicListItem(MusicData(
-                          songName: song.name,
-                          mvid: song.mvid,
-                          artists: song.artists
-                              .map((a) => a.name)
-                              .toList()
-                              .join('/'))),
+//TODO
+//                      child: WidgetMusicListItem(MusicData(
+//                          songName: song.name,
+//                          mvid: song.mvid,
+//                          artists: song.artists
+//                              .map((a) => a.name)
+//                              .toList()
+//                              .join('/'))),
                     ),
                   );
                 },

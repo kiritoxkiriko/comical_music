@@ -61,7 +61,8 @@ class _TopListPageState extends State<TopListPage> {
                           return GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: (){
-                              toPlayListPage(d);
+                              //TODO
+//                              toPlayListPage(d);
                             },
                             child: Container(
                               height: ScreenUtil().setWidth(200),
@@ -144,7 +145,8 @@ class _TopListPageState extends State<TopListPage> {
                         return GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: (){
-                            toPlayListPage(d);
+                            //TODO
+//                            toPlayListPage(d);
                           },
                           child: Align(
                             alignment: Alignment.topCenter,
@@ -203,8 +205,8 @@ class _TopListPageState extends State<TopListPage> {
       ),
     );
   }
-
-  void toPlayListPage(TopList data){
-    NavigatorUtil.goPlayListPage(context, data: Recommend(picUrl: data.coverImgUrl, name: data.name, playcount: data.playCount, id: data.id));
-  }
+//TODO
+//  void toPlayListPage(TopList data){
+//    NavigatorUtil.goPlayListPage(context, data: Recommend(picUrl: data.coverImgUrl, name: data.name, playcount: data.playCount, id: data.id));
+//  }
 }

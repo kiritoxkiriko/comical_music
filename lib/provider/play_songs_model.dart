@@ -118,10 +118,11 @@ class PlaySongsModel with ChangeNotifier{
   void nextPlay(){
     if(curIndex >= _songs.length-1){
       curIndex = 0;
+      pausePlay();
     }else{
       curIndex++;
+      play();
     }
-    play();
     saveCurSong();
   }
 

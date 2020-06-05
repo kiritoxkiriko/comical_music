@@ -5,14 +5,14 @@ import 'package:comical_music/utils/number_utils.dart';
 import 'package:comical_music/utils/utils.dart';
 
 /// 歌单、新碟上架等封面组件
-class PlayListCoverWidget extends StatelessWidget {
+class SongListCoverWidget extends StatelessWidget {
   final String url;
   final int playCount;
   final double width;
   final double height;
   final double radius;
 
-  PlayListCoverWidget(this.url,
+  SongListCoverWidget(this.url,
       {this.playCount, this.width = 200, this.height, this.radius = 16});
 
   @override
@@ -29,28 +29,28 @@ class PlayListCoverWidget extends StatelessWidget {
             playCount == null
                 ? Container()
                 : Padding(
-                    padding: EdgeInsets.only(
-                        top: ScreenUtil().setWidth(2),
-                        right: ScreenUtil().setWidth(5)),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-//                        Image.asset(
-//                          'images/icon_triangle.png',
-//                          width: ScreenUtil().setWidth(30),
-//                          height: ScreenUtil().setWidth(30),
-//                        ),
-//                        Text(
-//                          '${NumberUtils.amountConversion(playCount)}',
-//                          style: TextStyle(
-//                            color: Colors.white,
-//                            fontSize: 12,
-//                            fontWeight: FontWeight.w500,
-//                          ),
-//                        )
-                      ],
+              padding: EdgeInsets.only(
+                  top: ScreenUtil().setWidth(2),
+                  right: ScreenUtil().setWidth(5)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Image.asset(
+                    'images/icon_triangle.png',
+                    width: ScreenUtil().setWidth(30),
+                    height: ScreenUtil().setWidth(30),
+                  ),
+                  Text(
+                    '${NumberUtils.amountConversion(playCount)}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   )
+                ],
+              ),
+            )
           ],
         ),
       ),

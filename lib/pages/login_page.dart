@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:comical_music/model1/SongList.dart';
 import 'package:flutter/material.dart';
-import 'package:comical_music/provider/play_list_model.dart';
 import 'package:comical_music/provider/user_model.dart';
 import 'package:comical_music/utils/navigator_util.dart';
 import 'package:comical_music/utils/utils.dart';
@@ -147,7 +147,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     pwd,
                   ).then((value){
                     if(value != null){
-                      Provider.of<PlayListModel>(context).user = value;
+                      //Provider.of<SongList>(context).user = value;
                       NavigatorUtil.goHomePage(context);
                     }
                   });

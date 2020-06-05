@@ -1,7 +1,7 @@
+import 'package:comical_music/provider/song_list_model.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/pages/splash_page.dart';
-import 'package:comical_music/provider/play_list_model.dart';
 import 'package:comical_music/provider/play_songs_model.dart';
 import 'package:comical_music/provider/user_model.dart';
 import 'package:comical_music/route/navigate_service.dart';
@@ -28,8 +28,8 @@ void main() {
       ChangeNotifierProvider<PlaySongsModel>(
         create: (_) => PlaySongsModel()..init(),
       ),
-      ChangeNotifierProvider<PlayListModel>(
-        create: (_) => PlayListModel(),
+      ChangeNotifierProvider<SongListModel>(
+        create: (_) => SongListModel(),
       ),
     ],
     child: MyApp(),

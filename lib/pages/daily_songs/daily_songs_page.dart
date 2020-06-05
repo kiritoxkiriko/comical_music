@@ -90,17 +90,18 @@ class _DailySongsPageState extends State<DailySongsPage> {
                                 (context, index) {
                               this.data = data;
                               var d = data.recommend[index];
-                              return WidgetMusicListItem(
-                                MusicData(
-                                    mvid: d.mvid,
-                                    picUrl: d.album.picUrl,
-                                    songName: d.name,
-                                    artists:
-                                    "${d.artists.map((a) => a.name).toList().join('/')} - ${d.album.name}"),
-                                onTap: () {
-                                  playSongs(model, index);
-                                },
-                              );
+                                  //TODO
+//                              return WidgetMusicListItem(
+//                                MusicData(
+//                                    mvid: d.mvid,
+//                                    picUrl: d.album.picUrl,
+//                                    songName: d.name,
+//                                    artists:
+//                                    "${d.artists.map((a) => a.name).toList().join('/')} - ${d.album.name}"),
+//                                onTap: () {
+//                                  playSongs(model, index);
+//                                },
+//                              );
                             },
                             childCount: data.recommend.length,
                           ),

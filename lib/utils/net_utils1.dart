@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:comical_music/model1/Board.dart';
@@ -6,6 +7,8 @@ import 'package:comical_music/model1/Reply.dart';
 import 'package:comical_music/model1/ResponseData.dart';
 import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongComment.dart';
+import 'package:comical_music/model1/SongList.dart';
+import 'package:comical_music/model1/UserSpace.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -191,6 +194,41 @@ class NetUtils1 {
     }
   }
 
+  static Future<Response> _delete(
+      BuildContext context,
+      String url, {
+        Map<String, dynamic> params,
+        bool isShowLoading = true,
+      }) async {
+    Options options=Options(headers: {HttpHeaders.authorizationHeader:token});
+    if (isShowLoading) Loading.showLoading(context);
+    try {
+      print(params);
+      assert(_dio!=null);
+      return await _dio.delete(url,queryParameters: params, options: options);
+    } on DioError catch (e) {
+      print('1');
+      if (e == null) {
+        print('2');
+        return Future.error(Response(data: -1));
+      } else if (e.response != null) {
+        if (e.response.statusCode !=200) {
+          _reLogin();
+          print('3');
+          return Future.error(Response(data: -1));
+        } else {
+          print('4');
+          return Future.value(e.response);
+        }
+      } else {
+        print('5');
+        return Future.error(Response(data: -1));
+      }
+    } finally {
+      Loading.hideLoading(context);
+    }
+  }
+
   static void _reLogin() {
     Future.delayed(Duration(milliseconds: 200), () {
       Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
@@ -282,12 +320,20 @@ class NetUtils1 {
   /// 获取歌曲
   static Future<Song> getSong(BuildContext context, int songId) async{
     var response = await _get(context, '/song/${songId.toString()}');
-    return Song.fromJson(response.data);
+    return Song.fromJson(ResponseData.fromJson(response.data).data);
+  }
+
+  static Future<SongList> getSongList(BuildContext context, {
+    @required Map<String, dynamic> params,
+  }) async{
+    var response = await _get(context, '/songList/${params['songListId'].toString()}');
+    return SongList.fromJson(ResponseData.fromJson(response.data).data);
   }
 
   /// ** 验证发现原来的歌单详情接口就有数据，不用请求两次！！ **
   /// 真正的歌单详情
   /// 因为歌单详情只能获取歌单信息，并不能获取到歌曲信息，所以要请求两个接口，先获取歌单详情，再获取歌曲详情
+
   static Future<SongDetailData> _getPlayListData(
       BuildContext context, {
         Map<String, dynamic> params,
@@ -486,6 +532,30 @@ class NetUtils1 {
     return UserDetailData.fromJson(response.data);
   }
 
+  /// 获取用户信息
+  static Future<UserSpace> getUserSpace(
+      BuildContext context,{
+        @required Map<String, dynamic> params,
+      }) async {
+    var response = await _get(null, '/user/userSpace',
+        params: params, isShowLoading: false);
+    return UserSpace.fromJson(ResponseData.fromJson(response.data).data);
+  }
+  /// 获取用户创建的歌单
+  static Future<List<SongList>> getUserCreatedSongList(
+      BuildContext context,{
+        @required Map<String, dynamic> params,
+      }) async {
+    var response = await _get(null, '/songList/mySongList',
+        params: params, isShowLoading: false);
+    List<SongList> list1=[];
+    var list2=ResponseData.fromJson(response.data).data;
+    list2.forEach((e){
+      list1.add(SongList.fromJson(e));
+    });
+    return list1;
+  }
+
   static Future<List<Board>> getBoard(
       BuildContext context,) async {
     var response = await _get(null, '/board/all',
@@ -497,6 +567,12 @@ class NetUtils1 {
       boards.add(Board.fromJson(e));
     });
     return boards;
+  }
+
+
+  static Future<bool> deleteFavroteSongList (BuildContext context,int songListId) async{
+    var res=await _delete(context, "/songList/${songListId}");
+    return ResponseData.fromJson(res.data).data;
   }
 
 }

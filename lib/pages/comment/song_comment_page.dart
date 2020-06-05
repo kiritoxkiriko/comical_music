@@ -3,6 +3,7 @@ import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongComment.dart';
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -53,13 +54,7 @@ class _SongCommentPageState extends State<SongCommentPage> {
   void _request() async {
     songCommentPage = await NetUtils1.getSongComment(context, params: params);
     setState(() {
-//      if (r.hotComments != null && r.hotComments.isNotEmpty) {
-//        commentData.add(Comments(isTitle: true, title: "精彩评论"));
-//        commentData.addAll(r.hotComments);
-//      }
-//      if (commentData.where((d) => d.title == "最新评论").isEmpty) {
-//        commentData.add(Comments(isTitle: true, title: "最新评论"));
-//      }
+
       if (songCommentPage.totalElements > 0) {
         songCommentPage.data.forEach((element) {
           commentData.add(SongComment.fromJson(element));
@@ -71,8 +66,12 @@ class _SongCommentPageState extends State<SongCommentPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
+    return songCommentPage == null ? Container(
+      height: ScreenUtil().setWidth(400),
+      alignment: Alignment.center,
+      child: CupertinoActivityIndicator(),
+    ):
+    Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,

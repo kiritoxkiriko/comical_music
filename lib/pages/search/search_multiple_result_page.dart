@@ -74,19 +74,20 @@ class _SearchMultipleResultPageState extends State<SearchMultipleResultPage>
     return Consumer<PlaySongsModel>(
       builder: (context, model, child) {
         List<Widget> children = [];
-        for (int i = 0; i < song.songs.length; i++) {
-          children.add(WidgetMusicListItem(
-            MusicData(
-                songName: song.songs[i].name,
-                mvid: song.songs[i].mv,
-                artists:
-                    song.songs[i].ar.map((a) => a.name).toList().join('/')),
-            onTap: () {
-              //TODO
-              //_playSongs(model, song.songs, i);
-            },
-          ));
-        }
+        //TODO
+//        for (int i = 0; i < song.songs.length; i++) {
+//          children.add(WidgetMusicListItem(
+//            MusicData(
+//                songName: song.songs[i].name,
+//                mvid: song.songs[i].mv,
+//                artists:
+//                    song.songs[i].ar.map((a) => a.name).toList().join('/')),
+//            onTap: () {
+//              //TODO
+//              //_playSongs(model, song.songs, i);
+//            },
+//          ));
+//        }
 
         return _buildModuleTemplate("单曲",
             contentWidget: [

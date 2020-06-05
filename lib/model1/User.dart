@@ -28,7 +28,7 @@ class User {
     _id = json['id'];
     _username = json['username'];
     _ban = json['ban'];
-    _image = json['image']!=null? Image.fromJson(json['image']):Image(path:"images/icon_default.png");
+    _image = json['image']!=null? Image.fromJson(json['image']):null;
   }
 
   Map<String, dynamic> toJson() {

@@ -141,4 +141,9 @@ class Song {
 
   @override
   int get hashCode => _id.hashCode;
+
+  @override
+  String toString() {
+    return 'Song{_id: $_id, _name: $_name, _tags: $_tags, _singers: $_singers, _album: $_album, _uploader: $_uploader, _uploadTime: $_uploadTime, _path: $_path, _lrcPath: $_lrcPath, _exist: $_exist}';
+  }
 }
