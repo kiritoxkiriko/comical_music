@@ -25,7 +25,7 @@ import 'package:comical_music/model/search_result.dart' hide User,Song;
 import 'package:comical_music/model/song_comment.dart' hide User;
 import 'package:comical_music/model/song_detail.dart';
 import 'package:comical_music/model/top_list.dart';
-import 'package:comical_music/model/user.dart';
+import 'package:comical_music/model1/User.dart';
 import 'package:comical_music/model/user_detail.dart';
 import 'package:comical_music/route/navigate_service.dart';
 import 'package:comical_music/route/routes.dart';
@@ -41,10 +41,14 @@ import 'custom_log_interceptor.dart';
 class NetUtils1 {
   static Dio _dio;
   static Dio _dioURL;
-  static final String token=Application.sp.getString("token");
+  static String token=Application.sp.getString("token");
   static final String baseUrl = 'http://192.168.1.124:8088/api';
   static Future<List<InternetAddress>> _fm10s =
   InternetAddress.lookup("ws.acgvideo.com");
+
+  static void updateToken(){
+    token=Application.sp.getString("token");
+  }
 
   static void init() async {
 
@@ -237,14 +241,38 @@ class NetUtils1 {
   }
 
   /// 登录
-  static Future<User> login(
+  static Future<ResponseData> login(
       BuildContext context, String phone, String password) async {
-    var response = await _get(context, '/login/cellphone', params: {
+    var response = await _post(context, '/login', params: {
       'phone': phone,
       'password': password,
     });
 
-    return User.fromJson(response.data);
+    return ResponseData.fromJson(response.data);
+  }
+  static Future<ResponseData> quickLogin(
+      BuildContext context, String phone, String code) async {
+    var response = await _post(context, '/quickLogin', params: {
+      'phone': phone,
+      'code': code,
+    });
+
+    return ResponseData.fromJson(response.data);
+  }
+
+  static Future<ResponseData> getPhoneCode(BuildContext context, String phone) async{
+    var response = await _post(context, '/sendCode', params: {
+      'phone': phone,
+    });
+
+    return ResponseData.fromJson(response.data);
+  }
+
+
+  static Future<User> getUserInfo(
+      BuildContext context) async {
+    var response = await _get(context, '/user');
+    return User.fromJson(ResponseData.fromJson(response.data).data);
   }
 
   static Future<Response> refreshLogin(BuildContext context) async {
@@ -264,6 +292,16 @@ class NetUtils1 {
   static Future<RecommendData> getRecommendData(BuildContext context) async {
     var response = await _get(context, '/recommend/resource');
     return RecommendData.fromJson(response.data);
+  }
+
+  /// 推荐歌曲
+  static Future<List<Song>> getRecommendSong(BuildContext context) async {
+    var response = await _get(context, '/recommend/song');
+    List<Song> list=[];
+    ResponseData.fromJson(response.data).data.forEach((e){
+      list.add(Song.fromJson(e));
+    });
+    return list;
   }
 
   /// 新碟上架
@@ -492,6 +530,25 @@ class NetUtils1 {
     return SearchMultipleData.fromJson(response.data);
   }
 
+  /// 搜索歌曲
+  static Future<PageResponseData> searchSong(
+      BuildContext context, {
+        @required Map<String, dynamic> params,
+      }) async {
+    var response = await _get(context, '/search/song',
+        params: params, isShowLoading: false);
+    return PageResponseData.fromJson(response.data);
+  }
+  /// 搜索歌单
+  static Future<PageResponseData> searchSongList(
+      BuildContext context, {
+        @required Map<String, dynamic> params,
+      }) async {
+    var response = await _get(context, '/search/songList',
+        params: params, isShowLoading: false);
+    return PageResponseData.fromJson(response.data);
+  }
+
   /// 获取动态数据
   static Future<PageResponseData> getPost({
     @required int page,
@@ -522,15 +579,15 @@ class NetUtils1 {
         .replaceFirst('m10.music.126.net', m10 + '/m10.music.126.net');
   }
 
-  /// 获取用户信息
-  static Future<UserDetailData> getUserInfo(
-      BuildContext context,{
-        @required Map<String, dynamic> params,
-      }) async {
-    var response = await _get(null, '/user/detail',
-        params: params, isShowLoading: false);
-    return UserDetailData.fromJson(response.data);
-  }
+//  /// 获取用户信息
+//  static Future<UserDetailData> getUserInfo(
+//      BuildContext context,{
+//        @required Map<String, dynamic> params,
+//      }) async {
+//    var response = await _get(null, '/user/detail',
+//        params: params, isShowLoading: false);
+//    return UserDetailData.fromJson(response.data);
+//  }
 
   /// 获取用户信息
   static Future<UserSpace> getUserSpace(

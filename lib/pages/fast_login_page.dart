@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:comical_music/model1/SongList.dart';
-import 'package:comical_music/route/routes.dart';
+import 'package:comical_music/utils/net_utils1.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/provider/user_model.dart';
 import 'package:comical_music/utils/navigator_util.dart';
@@ -12,12 +12,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
+class FastLoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _FastLoginPageState createState() => _FastLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+class _FastLoginPageState extends State<FastLoginPage> with TickerProviderStateMixin {
   Animation<double> _animation;
   AnimationController _controller;
 
@@ -91,21 +91,11 @@ class __LoginWidgetState extends State<_LoginWidget> {
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
             child: Text(
-              '欢迎回来',
+              '快速登录',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
                 fontSize: 34,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: ScreenUtil().setWidth(3)),
-            child: Text(
-              '滑稽音乐',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
               ),
             ),
           ),
@@ -125,7 +115,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
             obscureText: true,
             controller: _pwdController,
             decoration: InputDecoration(
-                hintText: '密码',
+                hintText: '验证码',
                 prefixIcon: Icon(
                   Icons.lock,
                   color: Colors.grey,
@@ -138,11 +128,35 @@ class __LoginWidgetState extends State<_LoginWidget> {
                 callback: () {
                   String phone = _phoneController.text;
                   String pwd = _pwdController.text;
-                  if (phone.isEmpty || pwd.isEmpty) {
-                    Utils.showToast('请输入账号或者密码');
+                  if (phone.isEmpty ) {
+                    Utils.showToast('请输入手机号');
                     return;
                   }
-                  value.login(
+                  NetUtils1.getPhoneCode(context, phone).then((value) => {
+                    if(value.code!=200){
+                      Utils.showToast(value.msg??"发送失败")
+                    }else{
+                      Utils.showToast(value.msg??"发送成功")
+                    }
+                  });
+                },
+                content: '获取验证码',
+                width: double.infinity,
+              );
+            },
+          ),
+          VEmptyView(40),
+          Consumer<UserModel>(
+            builder: (BuildContext context, UserModel value, Widget child) {
+              return CommonButton(
+                callback: () {
+                  String phone = _phoneController.text;
+                  String pwd = _pwdController.text;
+                  if (phone.isEmpty || pwd.isEmpty) {
+                    Utils.showToast('请输入账号或验证码');
+                    return;
+                  }
+                  value.fastLogin(
                     context,
                     phone,
                     pwd,
@@ -154,18 +168,6 @@ class __LoginWidgetState extends State<_LoginWidget> {
                   });
                 },
                 content: '登录',
-                width: double.infinity,
-              );
-            },
-          ),
-          VEmptyView(40),
-          Consumer<UserModel>(
-            builder: (BuildContext context, UserModel value, Widget child) {
-              return CommonButton(
-                callback: () {
-                  NavigatorUtil.goFastLoginPage(context);
-                },
-                content: '快速登录',
                 width: double.infinity,
               );
             },

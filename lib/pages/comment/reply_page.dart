@@ -27,6 +27,9 @@ import 'comment_input_widget.dart';
 
 class ReplyPage extends StatefulWidget {
   final Post post;
+  //List<Reply> commentData = [];
+  Map<String, int> params;
+
 
   ReplyPage(this.post);
 
@@ -35,7 +38,6 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage> {
-  Map<String, int> params;
   List<Reply> commentData = [];
   PageResponseData replyPage;
   EasyRefreshController _controller;
@@ -43,24 +45,29 @@ class _ReplyPageState extends State<ReplyPage> {
 
   @override
   void initState() {
-    super.initState();
+    //super.initState();
     _controller = EasyRefreshController();
+    Set<String> a={};
+
     ///设置抬头
     commentData.add(null);
     WidgetsBinding.instance.addPostFrameCallback((d) {
-      params = {'postId': widget.post.id};
-      _request();
+      widget.params = {'postId': widget.post.id};
+      if (commentData.length<2) {
+        _request();
+      }
     });
   }
 
   void _request() async {
-    replyPage = await NetUtils1.getReply(context, params: params);
+    replyPage = await NetUtils1.getReply(context, params: widget.params);
     setState(() {
 
       if (replyPage.totalElements > 0) {
         replyPage.data.forEach((element) {
           commentData.add(Reply.fromJson(element));
         });
+        //widget.params['page']++;
         //commentData.addAll(songCommentPage.data);
       }
     });
@@ -68,12 +75,12 @@ class _ReplyPageState extends State<ReplyPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return replyPage == null ? Container(
       height: ScreenUtil().setWidth(400),
       alignment: Alignment.center,
       child: CupertinoActivityIndicator(),
-    ) :Scaffold(
+    ) :
+    Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
@@ -89,9 +96,9 @@ class _ReplyPageState extends State<ReplyPage> {
                 footer: LoadFooter(),
                 controller: _controller,
                 onLoad: () async {
-                  params['page'] == null
-                      ? params['page'] = 2
-                      : params['page']++;
+                  widget.params['page'] == null
+                      ? widget.params['page'] = 2
+                      : widget.params['page']++;
                   _request();
                   _controller.finishLoad(
                       noMore: !replyPage.hasNext);
@@ -144,12 +151,11 @@ class _ReplyPageState extends State<ReplyPage> {
                 }).then((r) {
                   Utils.showToast('回复成功！');
                   setState(() {
-                    commentData.insert(
-                        commentData
-                            .map((c) => c)
-                            .toList()
-                            .indexOf(null) +
-                            1,
+                    commentData.insert(commentData
+                        .map((c) => c)
+                        .toList()
+                        .indexOf(null) +
+                        1,
                         r);
                   });
                 });

@@ -38,6 +38,7 @@ class _SongCommentPageState extends State<SongCommentPage> {
   PageResponseData songCommentPage;
   EasyRefreshController _controller;
   FocusNode _blankNode = FocusNode();
+//  bool next=true;
 
   @override
   void initState() {
@@ -47,7 +48,9 @@ class _SongCommentPageState extends State<SongCommentPage> {
     commentData.add(null);
     WidgetsBinding.instance.addPostFrameCallback((d) {
       params = {'songId': widget.song.id};
-      _request();
+      if (commentData.length<2){
+        _request();
+      }
     });
   }
 
@@ -142,12 +145,11 @@ class _SongCommentPageState extends State<SongCommentPage> {
                 }).then((r) {
                   Utils.showToast('评论成功！');
                   setState(() {
-                    commentData.insert(
-                        commentData
-                                .map((c) => c)
-                                .toList()
-                                .indexOf(null) +
-                            1,
+                    commentData.insert(commentData
+                        .map((c) => c)
+                        .toList()
+                        .indexOf(null) +
+                        1,
                         r);
                   });
                 });

@@ -1,3 +1,4 @@
+import 'package:comical_music/model1/ResponseData.dart';
 import 'package:comical_music/utils/net_utils1.dart';
 import 'package:flutter/material.dart';
 import 'package:comical_music/application.dart';
@@ -47,7 +48,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   void goPage() async{
     await Application.initSp();
-    Application.sp.setString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE4MjAwNTAsInVzZXJJZCI6MX0.HGWixbMas2scECd7ORUVi8o4WX-IspqWTMkxrbBZ-KM");
+    //Application.sp.setString("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE4MjAwNTAsInVzZXJJZCI6MX0.HGWixbMas2scECd7ORUVi8o4WX-IspqWTMkxrbBZ-KM");
     UserModel userModel = Provider.of<UserModel>(context);
     userModel.initUser();
     PlaySongsModel playSongsModel = Provider.of<PlaySongsModel>(context);
@@ -59,14 +60,16 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       playSongsModel.curIndex = index;
     }
     if (userModel.user != null) {
-      await NetUtils.refreshLogin(context).then((value){
-        if(value.data != -1){
+//      await NetUtils.refreshLogin(context).then((value){
+//        if(ResponseData.fromJson(value.data).data != null){
+//          userModel.saveToken(ResponseData.fromJson(value.data).data);
           NavigatorUtil.goHomePage(context);
-        }
-      });
+//        }
+//      });
       //Provider.of<P>(context).user = userModel.user;
-    } else
+    }else{
       NavigatorUtil.goLoginPage(context);
+    }
   }
 
   @override

@@ -25,6 +25,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _tabController = TabController(vsync: this, length: 3);
   }
 
+  Future<bool> _openAlertDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false, //// user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否注销?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('取消'),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            FlatButton(
+              child: Text('确认'),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,9 +77,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           builder: (_, model, __) {
                             var user = model.user;
                             return GestureDetector(
-                              onTap: () => NavigatorUtil.goUserDetailPage(context, user.account.id),
+                              onTap: () => {
+                                _openAlertDialog(context).then((value) {
+                                  if(value){
+                                    NavigatorUtil.goLoginPage(context);
+                                  }
+                                })
+
+                              },
                               child:
-                                  RoundImgWidget(user.profile.avatarUrl, 140.w),
+                                  RoundImgWidget(user.image.path, 140.w),
                             );
                           },
                         ),
@@ -71,27 +104,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             //TODO
                             Tab(
                               text: '动态',
-//                              child: DropdownButton<String>(
-//                                hint: Text("动态"),
-//                                onChanged: (T){
-//
-//                                },
-//                                items: <DropdownMenuItem<String>>[
-//                                  DropdownMenuItem(
-//                                    child: Text("1"),
-//                                    value: "1",
-//                                  ),
-//                                  DropdownMenuItem(
-//                                    child: Text("2"),
-//                                    value: "12",
-//                                  ),
-//                                  DropdownMenuItem(
-//                                    child: Text("3"),
-//                                    value: "1",
-//                                  ),
-//
-//                                ],
-//                              ),
                             ),
                             Tab(
                               text: '发现',

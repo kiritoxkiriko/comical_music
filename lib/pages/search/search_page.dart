@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/application.dart';
 import 'package:comical_music/model/hot_search.dart';
-import 'package:comical_music/pages/search/search_multiple_result_page.dart';
 import 'package:comical_music/pages/search/search_other_result_page.dart';
 import 'package:comical_music/utils/net_utils.dart';
 import 'package:comical_music/utils/utils.dart';
@@ -24,13 +23,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   bool _isSearching = false; // 是否正在搜索，改变布局
   Map<String, int> _searchingTabMap = {
     '单曲': 1,
-    '专辑': 10,
-    '歌手': 100,
-    '歌单': 1000,
-    '用户': 1002,
-    '视频': 1014,
+    '歌单': 2,
   };
-  List<String> _searchingTabKeys = ['综合'];
+  List<String> _searchingTabKeys = [];
   TabController _searchingTabController;
   String searchText;
 
@@ -124,98 +119,98 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   }
 
   // 热搜
-  Widget _buildHotSearch() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          '热搜榜',
-          style: bold18TextStyle,
-        ),
-        VEmptyView(15),
-        CustomFutureBuilder<HotSearchData>(
-          futureFunc: NetUtils.getHotSearchData,
-          builder: (context, data) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                var curData = data.data[index];
-                return GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    searchText = curData.searchWord;
-                    _search();
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10)),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '${index + 1}',
-                          style: index < 3
-                              ? bold18OrangeTextStyle
-                              : bold18GrayTextStyle,
-                        ),
-                        HEmptyView(20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: ScreenUtil().setWidth(5)),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text(
-                                      curData.searchWord,
-                                      style: index < 3
-                                          ? w500_16TextStyle
-                                          : common16TextStyle,
-                                    ),
-                                    Offstage(
-                                        offstage: curData.iconUrl == null,
-                                        child: HEmptyView(10)),
-                                    curData.iconUrl == null ||
-                                            curData.iconUrl.isEmpty
-                                        ? Container()
-                                        : UnconstrainedBox(
-                                            child: Utils.showNetImage(
-                                              curData.iconUrl,
-                                              height:
-                                                  ScreenUtil().setHeight(18),
-                                            ),
-                                          ),
-                                    Spacer(),
-                                    Text(
-                                      curData.score.toString(),
-                                      style: common14GrayTextStyle,
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text(
-                                curData.content,
-                                style: common13GrayTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              itemCount: data.data.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-            );
-          },
-        )
-      ],
-    );
-  }
+//  Widget _buildHotSearch() {
+//    return Column(
+//      mainAxisSize: MainAxisSize.min,
+//      crossAxisAlignment: CrossAxisAlignment.start,
+//      children: <Widget>[
+//        Text(
+//          '热搜榜',
+//          style: bold18TextStyle,
+//        ),
+//        VEmptyView(15),
+//        CustomFutureBuilder<HotSearchData>(
+//          futureFunc: NetUtils.getHotSearchData,
+//          builder: (context, data) {
+//            return ListView.builder(
+//              itemBuilder: (context, index) {
+//                var curData = data.data[index];
+//                return GestureDetector(
+//                  behavior: HitTestBehavior.translucent,
+//                  onTap: () {
+//                    searchText = curData.searchWord;
+//                    _search();
+//                  },
+//                  child: Padding(
+//                    padding: EdgeInsets.symmetric(
+//                        vertical: ScreenUtil().setWidth(10)),
+//                    child: Row(
+//                      children: <Widget>[
+//                        Text(
+//                          '${index + 1}',
+//                          style: index < 3
+//                              ? bold18OrangeTextStyle
+//                              : bold18GrayTextStyle,
+//                        ),
+//                        HEmptyView(20),
+//                        Expanded(
+//                          child: Column(
+//                            crossAxisAlignment: CrossAxisAlignment.start,
+//                            children: <Widget>[
+//                              Padding(
+//                                padding: EdgeInsets.symmetric(
+//                                    vertical: ScreenUtil().setWidth(5)),
+//                                child: Row(
+//                                  children: <Widget>[
+//                                    Text(
+//                                      curData.searchWord,
+//                                      style: index < 3
+//                                          ? w500_16TextStyle
+//                                          : common16TextStyle,
+//                                    ),
+//                                    Offstage(
+//                                        offstage: curData.iconUrl == null,
+//                                        child: HEmptyView(10)),
+//                                    curData.iconUrl == null ||
+//                                            curData.iconUrl.isEmpty
+//                                        ? Container()
+//                                        : UnconstrainedBox(
+//                                            child: Utils.showNetImage(
+//                                              curData.iconUrl,
+//                                              height:
+//                                                  ScreenUtil().setHeight(18),
+//                                            ),
+//                                          ),
+//                                    Spacer(),
+//                                    Text(
+//                                      curData.score.toString(),
+//                                      style: common14GrayTextStyle,
+//                                      textAlign: TextAlign.right,
+//                                    ),
+//                                  ],
+//                                ),
+//                              ),
+//                              Text(
+//                                curData.content,
+//                                style: common13GrayTextStyle,
+//                              ),
+//                            ],
+//                          ),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                );
+//              },
+//              itemCount: data.data.length,
+//              shrinkWrap: true,
+//              physics: NeverScrollableScrollPhysics(),
+//            );
+//          },
+//        )
+//      ],
+//    );
+//  }
 
   // 搜索
   void _search() {
@@ -241,7 +236,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           vertical: ScreenUtil().setWidth(30)),
       children: <Widget>[
         _buildHistorySearch(),
-        _buildHotSearch(),
+//        _buildHotSearch(),
       ],
     );
   }
@@ -266,12 +261,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         Expanded(
           child: TabBarView(
             children: [
-              SearchMultipleResultPage(searchText, onTapMore: (value) {
-                _searchingTabController.animateTo(value);
-              }, onTapSimText: (text){
-                searchText = text;
-                _search();
-              },),
               ..._searchingTabMap.keys
                   .map((key) => SearchOtherResultPage(
                       _searchingTabMap[key].toString(), searchText))
@@ -298,7 +287,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               textInputAction: TextInputAction.search,
               onEditingComplete: () {
                 searchText = _searchController.text.isEmpty
-                    ? '林俊杰'
+                    ? '滑稽'
                     : _searchController.text;
                 _search();
               },

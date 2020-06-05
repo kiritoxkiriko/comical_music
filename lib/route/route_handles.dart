@@ -3,6 +3,7 @@ import 'package:comical_music/model1/Song.dart';
 import 'package:comical_music/model1/SongList.dart';
 import 'package:comical_music/pages/comment/reply_page.dart';
 import 'package:comical_music/pages/comment/song_comment_page.dart';
+import 'package:comical_music/pages/fast_login_page.dart';
 import 'package:comical_music/pages/play_list/song_list_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,11 @@ var splashHandler = new Handler(
 var loginHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
       return LoginPage();
+    });
+
+var fastLoginHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      return FastLoginPage();
     });
 
 // 跳转到主页

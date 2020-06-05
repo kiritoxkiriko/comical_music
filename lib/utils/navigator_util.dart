@@ -33,6 +33,9 @@ class NavigatorUtil {
   static void goLoginPage(BuildContext context) {
     _navigateTo(context, Routes.login, clearStack: true);
   }
+  static void goFastLoginPage(BuildContext context) {
+    _navigateTo(context, Routes.fastLogin, clearStack: true);
+  }
 
   /// 首页
   static void goHomePage(BuildContext context) {

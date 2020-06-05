@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:comical_music/model1/ResponseData.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';

@@ -1,3 +1,4 @@
+import 'package:comical_music/model1/SongList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:comical_music/model/recommend.dart';
@@ -11,15 +12,11 @@ import 'h_empty_view.dart';
 
 class SearchPlayListWidget extends StatelessWidget {
 
-  final String url;
-  final String name;
-  final String info;
-  final double width;
-  final int id;
-  final int playCount;
+  final SongList songList;
+   double width=140;
 
 
-  SearchPlayListWidget({this.id, this.url, this.name, this.info, this.width = 140, this.playCount});
+  SearchPlayListWidget(this.songList, this.width);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class SearchPlayListWidget extends StatelessWidget {
         child: Row(
           children: <Widget>[
             RoundedNetImage(
-              '$url?param=150y150',
+              songList.image.path,
               width: width,
               height: width,
               radius: 8,
@@ -51,14 +48,14 @@ class SearchPlayListWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    name,
+                    songList.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: common14TextStyle,
                   ),
                   VEmptyView(10),
                   Text(
-                    info,
+                    songList.songs.length.toString()+"首 by"+songList.creator.username,
                     style: smallGrayTextStyle,
                   ),
                 ],
