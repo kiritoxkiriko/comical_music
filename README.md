@@ -1,16 +1,5 @@
-# comical_music
+# 滑稽音乐App
+此项目为本科毕设 - 《基于多平台应用的音乐共享社区设计与实现》前端部分，后端请看 https://github.com/kiritoxkiriko/comical_music_server  
 
-A new Flutter project.
+使用纯flutter构建，参考了大佬的项目 https://github.com/fluttercandies/NeteaseCloudMusic
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
